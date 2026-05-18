@@ -1,7 +1,7 @@
 package com.example.debt_tracker.controller
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.example.debt_tracker.data.model.Debt
 import com.example.debt_tracker.data.repository.DebtRepository
 import com.example.debt_tracker.ui.model.DebtWithNextDue
@@ -15,13 +15,13 @@ class DebtController(
 ) : BaseController() {
 
     val activeDebts: LiveData<List<DebtWithNextDue>> =
-        Transformations.map(repository.observeActiveDebts()) { debts ->
+        repository.observeActiveDebts().map { debts ->
             debts.map { DebtWithNextDue(it, DateUtils.computeNextDueDate(it)) }
                 .sortedBy { it.nextDueDate }
         }
 
     val completedDebts: LiveData<List<DebtWithNextDue>> =
-        Transformations.map(repository.observeCompletedDebts()) { debts ->
+        repository.observeCompletedDebts().map { debts ->
             debts.map { DebtWithNextDue(it, DateUtils.computeNextDueDate(it)) }
         }
 

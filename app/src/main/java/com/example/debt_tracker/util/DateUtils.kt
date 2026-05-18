@@ -9,19 +9,26 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.min
 
 object DateUtils {
-    private val dayFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    private val monthFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/yyyy")
-
     fun parseYearMonth(value: String): YearMonth = YearMonth.parse(value)
 
-    fun formatDay(date: LocalDate): String = date.format(dayFormatter)
+    fun formatDay(date: LocalDate): String {
+        val locale = java.util.Locale.getDefault()
+        val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "ddMMyyyy")
+        val formatter = DateTimeFormatter.ofPattern(pattern, locale)
+        return date.format(formatter)
+    }
 
     fun formatDay(timestampMillis: Long): String {
         val date = Instant.ofEpochMilli(timestampMillis).atZone(ZoneId.systemDefault()).toLocalDate()
         return formatDay(date)
     }
 
-    fun formatMonthYear(yearMonth: YearMonth): String = yearMonth.format(monthFormatter)
+    fun formatMonthYear(yearMonth: YearMonth): String {
+        val locale = java.util.Locale.getDefault()
+        val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "MMyyyy")
+        val formatter = DateTimeFormatter.ofPattern(pattern, locale)
+        return yearMonth.format(formatter)
+    }
 
     fun nowYearMonth(): YearMonth = YearMonth.now()
 

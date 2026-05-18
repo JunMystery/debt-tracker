@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dt_background"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/dt_background"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="@string/debt_detail"
+            app:titleTextColor="@color/dt_on_surface" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Core Details Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/dt_outline"
+                    app:cardBackgroundColor="@color/dt_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/textCreditor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dt_on_surface"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            tools:text="Ngân hàng ABC" />
+
+                        <!-- Contract Number with copy button -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="8dp">
+
+                            <TextView
+                                android:id="@+id/textContract"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="14sp"
+                                tools:text="Số hợp đồng: HD-12345" />
+
+                            <ImageView
+                                android:id="@+id/imageCopy"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:src="@drawable/ic_copy"
+                                app:tint="@color/dt_primary" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="16dp"
+                            android:background="@color/dt_outline" />
+
+                        <!-- Grid Info -->
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="2"
+                            android:rowCount="5"
+                            android:useDefaultMargins="true">
+
+                            <TextView
+                                android:layout_columnWeight="1"
+                                android:text="@string/monthly_amount"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textMonthlyAmount"
+                                android:layout_columnWeight="1"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                tools:text="5.000.000 ₫" />
+
+                            <TextView
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="Kỳ hạn kế tiếp"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textNextDue"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                tools:text="15/06/2026" />
+
+                            <TextView
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="Số tháng còn lại"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textRemainingMonths"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                tools:text="12 tháng" />
+
+                            <TextView
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="Đã thanh toán"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textTotalPaid"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_success"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                tools:text="15.000.000 ₫" />
+
+                            <TextView
+                                android:id="@+id/labelPrincipal"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="Nợ gốc"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/textPrincipal"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                tools:text="100.000.000 ₫" />
+                        </GridLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Payment History Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/dt_outline"
+                    app:cardBackgroundColor="@color/dt_surface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/payment_history"
+                            android:textColor="@color/dt_on_surface"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="12dp" />
+
+                        <TextView
+                            android:id="@+id/textNoPayments"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginVertical="24dp"
+                            android:text="@string/no_data"
+                            android:textColor="@color/dt_secondary"
+                            android:textSize="13sp"
+                            android:visibility="gone" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerPayments"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            tools:listitem="@layout/item_payment" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Bottom Actions -->
+        <LinearLayout
+            android:id="@+id/layoutBottomActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/dt_surface"
+            android:padding="16dp"
+            android:elevation="4dp"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMarkComplete"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/mark_completed"
+                android:textColor="@color/dt_primary"
+                app:strokeColor="@color/dt_primary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUpdatePayment"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="@string/update_payment"
+                app:backgroundTint="@color/dt_primary" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

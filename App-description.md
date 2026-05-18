@@ -10,7 +10,7 @@ Debt Tracker is a simple, offline-first Android application built with Kotlin. I
 - **Navigation:** Android Jetpack Navigation (single-activity, multiple fragments)
 - **Local Database:** Room (SQLite)
 - **Backup:** Manual CSV export to external storage (Downloads/Debt-Tracker)
-- **Min SDK:** 24 (Android 7.0)
+- **Min SDK:** Android 10 (API level 29)
 - **Dependency Injection:** Manual (or Hilt if desired – here described without DI framework for simplicity)
 
 ## 3. Core Principles & Global Behaviour

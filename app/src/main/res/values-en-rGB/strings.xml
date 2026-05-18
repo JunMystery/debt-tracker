@@ -58,7 +58,7 @@
     <string name="debt_card_due">Due: %1$s</string>
     <string name="error_loading_data">Could not load data.</string>
     <string name="dashboard_open_list">Open Debts List</string>
-    <string name="currency_symbol">$</string>
+    <string name="currency_symbol">£</string>
     <string name="exchange_rate_format">≈ %1$s (Real-time rate: %2$s)</string>
     <string name="updating_exchange_rate">Updating exchange rate...</string>
     <string name="settings_title">Settings</string>
