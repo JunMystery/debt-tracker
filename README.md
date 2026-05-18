@@ -60,8 +60,8 @@ A premium, offline-first Android application built with Kotlin to manage recurri
 
 ## 📂 Version History & Change Logs
 
-- [v1.0.0 Change Log](file:///e:/Github/Debt-Tracker/versions/v1.0.0.md) — Initial feature-complete release including multi-currency localizations, dynamic exchange rates, exact scheduling, and CSV import/export.
-- [v1.1.0 Change Log](file:///e:/Github/Debt-Tracker/versions/v1.1.0.md) — Multi-Type Loan System: comprehensive support for fixed rate, reducing balance compound interest, interest-only bullet, and Islamic finance, real-time principal auto-calculations, adaptive detail grids, and upgraded CSV export/import.
+- [v1.0.0 Change Log](file:///e:/Github/Debt-Tracker/changelogs/v1.0.0.md) — Initial feature-complete release including multi-currency localizations, dynamic exchange rates, exact scheduling, and CSV import/export.
+- [v1.1.0 Change Log](file:///e:/Github/Debt-Tracker/changelogs/v1.1.0.md) — Multi-Type Loan System: comprehensive support for fixed rate, reducing balance compound interest, interest-only bullet, and Islamic finance, real-time principal auto-calculations, adaptive detail grids, and upgraded CSV export/import.
 
 ---
 
