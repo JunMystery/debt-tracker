@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Debttracker" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/dt_primary</item>
+        <item name="colorOnPrimary">@color/dt_on_primary</item>
+        <item name="colorPrimaryContainer">@color/dt_primary_container</item>
+        <item name="colorSecondary">@color/dt_secondary</item>
+        <item name="colorSurface">@color/dt_surface</item>
+        <item name="colorOnSurface">@color/dt_on_surface</item>
+        <item name="android:statusBarColor">@color/dt_primary</item>
+        <item name="android:navigationBarColor">@color/dt_surface</item>
+        <item name="android:windowBackground">@color/dt_background</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Widget.DebtTracker.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/dt_surface</item>
+        <item name="titleTextColor">@color/dt_on_surface</item>
+        <item name="subtitleTextColor">@color/dt_secondary</item>
+    </style>
+</resources>

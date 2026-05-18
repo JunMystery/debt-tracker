@@ -1,0 +1,40 @@
+// Setup task to create directory structure
+tasks.register('setupPackages') {
+    doFirst {
+        def baseDir = file('app/src/main/java/com/example/debt_tracker')
+        
+        def dirs = [
+            'entity',
+            'dao',
+            'database',
+            'repository',
+            'service',
+            'validation',
+            'controller',
+            'view/activity',
+            'view/screen',
+            'view/adapter',
+            'view/dialog',
+            'view/component',
+            'shared/core',
+            'shared/util',
+            'shared/ui'
+        ]
+        
+        dirs.forEach { dir ->
+            file("$baseDir/$dir").mkdirs()
+            println "Created directory: $dir"
+        }
+    }
+}
+
+setupPackages.finalizedBy 'createKotlinFiles'
+
+tasks.register('createKotlinFiles') {
+    doFirst {
+        def baseDir = file('app/src/main/java/com/example/debt_tracker')
+        
+        // Create all Kotlin files here
+        println "Creating Kotlin files..."
+    }
+}
