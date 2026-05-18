@@ -48,7 +48,7 @@ class CsvBackupManager(
             ?: error("Cannot open backup output stream")
 
         OutputStreamWriter(output).use { writer ->
-            writer.appendLine("ID,Creditor,Contract,MonthlyAmount,DueDay,Start,End,TotalPaid,Principal,Completed")
+            writer.appendLine("ID,Creditor,Contract,MonthlyAmount,DueDay,Start,End,TotalPaid,Principal,Completed,InterestRate,InterestType,PaymentType,CreditLimit,RemainingBalance,LastInterestCalc,MinPaymentPercent")
             debts.forEach { debt ->
                 writer.appendLine(
                     listOf(
@@ -61,7 +61,14 @@ class CsvBackupManager(
                         debt.endYearMonth,
                         debt.totalPaid,
                         debt.principal,
-                        debt.isCompleted
+                        debt.isCompleted,
+                        debt.interestRate,
+                        debt.interestType.name,
+                        debt.paymentType.name,
+                        debt.creditLimit,
+                        debt.remainingBalance,
+                        debt.lastInterestCalculationDate ?: "",
+                        debt.minimumPaymentPercent
                     ).joinToString(",")
                 )
             }
@@ -152,7 +159,7 @@ class CsvBackupManager(
                             continue
                         }
 
-                        // ID,Creditor,Contract,MonthlyAmount,DueDay,Start,End,TotalPaid,Principal,Completed
+                        // ID,Creditor,Contract,MonthlyAmount,DueDay,Start,End,TotalPaid,Principal,Completed,InterestRate,InterestType,PaymentType,CreditLimit,RemainingBalance,LastInterestCalc,MinPaymentPercent
                         if (parts.size >= 10) {
                             val id = parts[0].toLongOrNull() ?: 0L
                             val creditor = parts[1]
@@ -164,6 +171,34 @@ class CsvBackupManager(
                             val totalPaid = parts[7].toDoubleOrNull() ?: 0.0
                             val principal = parts[8].toDoubleOrNull() ?: 0.0
                             val completed = parts[9].toBoolean()
+
+                            var interestRate = 0.0
+                            var interestType = com.example.debt_tracker.data.model.InterestType.FIXED
+                            var paymentType = com.example.debt_tracker.data.model.PaymentType.INSTALLMENT
+                            var creditLimit = 0.0
+                            var remainingBalance = totalPaid
+                            var lastInterestCalc: Long? = null
+                            var minPaymentPercent = 0.0
+
+                            if (parts.size >= 17) {
+                                interestRate = parts[10].toDoubleOrNull() ?: 0.0
+                                interestType = try {
+                                    com.example.debt_tracker.data.model.InterestType.valueOf(parts[11])
+                                } catch (e: Exception) {
+                                    com.example.debt_tracker.data.model.InterestType.FIXED
+                                }
+                                paymentType = try {
+                                    com.example.debt_tracker.data.model.PaymentType.valueOf(parts[12])
+                                } catch (e: Exception) {
+                                    com.example.debt_tracker.data.model.PaymentType.INSTALLMENT
+                                }
+                                creditLimit = parts[13].toDoubleOrNull() ?: 0.0
+                                remainingBalance = parts[14].toDoubleOrNull() ?: 0.0
+                                lastInterestCalc = parts[15].toLongOrNull()
+                                minPaymentPercent = parts[16].toDoubleOrNull() ?: 0.0
+                            } else {
+                                remainingBalance = if (completed) 0.0 else maxOf(principal - totalPaid, 0.0)
+                            }
 
                             debtsToInsert.add(
                                 Debt(
@@ -177,6 +212,13 @@ class CsvBackupManager(
                                     totalPaid = totalPaid,
                                     principal = principal,
                                     isCompleted = completed,
+                                    interestRate = interestRate,
+                                    interestType = interestType,
+                                    paymentType = paymentType,
+                                    creditLimit = creditLimit,
+                                    remainingBalance = remainingBalance,
+                                    lastInterestCalculationDate = lastInterestCalc,
+                                    minimumPaymentPercent = minPaymentPercent,
                                     updatedAt = System.currentTimeMillis()
                                 )
                             )

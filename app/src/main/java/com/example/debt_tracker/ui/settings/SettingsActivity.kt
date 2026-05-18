@@ -14,6 +14,7 @@ import com.example.debt_tracker.R
 import com.example.debt_tracker.data.repository.DebtRepository
 import com.example.debt_tracker.databinding.ActivitySettingsBinding
 import com.example.debt_tracker.notification.DebtReminderScheduler
+import com.example.debt_tracker.ui.components.NoFilterAdapter
 import com.example.debt_tracker.ui.components.WheelPickerDialog
 import com.example.debt_tracker.util.overrideSlideTransition
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -322,27 +323,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private class NoFilterAdapter<T>(
-        context: Context,
-        layout: Int,
-        var items: List<T>
-    ) : ArrayAdapter<T>(context, layout, items) {
 
-        private val filter = object : android.widget.Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val results = FilterResults()
-                results.values = items
-                results.count = items.size
-                return results
-            }
-
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                notifyDataSetChanged()
-            }
-        }
-
-        override fun getFilter(): android.widget.Filter = filter
-    }
 
     private fun setupImportSection() {
         binding.btnImportCsv.setOnClickListener {

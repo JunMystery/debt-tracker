@@ -32,7 +32,7 @@
 
             <!-- Creditor Name -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -47,7 +47,7 @@
 
             <!-- Contract Number -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -94,7 +94,7 @@
 
             <!-- Monthly Amount -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -171,9 +171,95 @@
                     tools:text="Chọn tháng kết thúc..." />
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Interest Type Dropdown -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/interest_type">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/interestTypeDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/dt_on_surface"
+                    android:saveEnabled="false"
+                    android:popupBackground="@color/dt_surface" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Payment Type Dropdown -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/payment_type">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/paymentTypeDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/dt_on_surface"
+                    android:saveEnabled="false"
+                    android:popupBackground="@color/dt_surface" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Interest/Profit Rate -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/interestRateLayout"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/interest_rate">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editInterestRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Credit Limit (visible only for REDUCING balance) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/creditLimitLayout"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:hint="@string/credit_limit">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editCreditLimit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Minimum Payment Percent (visible only for REDUCING balance) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/minPaymentPercentLayout"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:hint="@string/min_payment_percent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editMinPaymentPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Principal (Optional) -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
@@ -183,7 +269,10 @@
                     android:id="@+id/editPrincipal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:clickable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

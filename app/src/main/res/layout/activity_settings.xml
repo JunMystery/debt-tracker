@@ -68,13 +68,9 @@
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:boxCornerRadiusTopStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusBottomEnd="12dp">
+                        android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
                             android:id="@+id/autoCompleteLanguage"
@@ -157,15 +153,11 @@
                         <!-- Remind offset (days) -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layoutRemindDays"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/remind_days_before"
-                            android:layout_marginBottom="16dp"
-                            app:boxCornerRadiusTopStart="12dp"
-                            app:boxCornerRadiusTopEnd="12dp"
-                            app:boxCornerRadiusBottomStart="12dp"
-                            app:boxCornerRadiusBottomEnd="12dp">
+                            android:layout_marginBottom="16dp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editRemindDays"
@@ -179,15 +171,11 @@
 
                         <!-- Frequency dropdown -->
                         <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/remind_frequency"
-                            android:layout_marginBottom="16dp"
-                            app:boxCornerRadiusTopStart="12dp"
-                            app:boxCornerRadiusTopEnd="12dp"
-                            app:boxCornerRadiusBottomStart="12dp"
-                            app:boxCornerRadiusBottomEnd="12dp">
+                            android:layout_marginBottom="16dp">
 
                             <AutoCompleteTextView
                                 android:id="@+id/autoCompleteFrequency"

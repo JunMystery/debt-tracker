@@ -70,15 +70,24 @@ class DebtRepository private constructor(
                     amount = amount
                 )
             )
+
+            val newTotalPaid = debt.totalPaid + amount
+            val newRemainingBalance = com.example.debt_tracker.util.LoanCalculator.calculateNewBalance(debt, amount)
+            val isCompleted = com.example.debt_tracker.util.LoanCalculator.isDebtCompleted(
+                debt.copy(totalPaid = newTotalPaid, remainingBalance = newRemainingBalance)
+            )
+
             debtDao.updateDebt(
                 debt.copy(
-                    totalPaid = debt.totalPaid + amount,
-                    isCompleted = debt.isCompleted || (debt.totalPaid + amount >= debt.expectedTotal()),
-                    completionTimestamp = if (debt.totalPaid + amount >= debt.expectedTotal()) {
+                    totalPaid = newTotalPaid,
+                    remainingBalance = newRemainingBalance,
+                    isCompleted = isCompleted,
+                    completionTimestamp = if (isCompleted) {
                         System.currentTimeMillis()
                     } else {
-                        debt.completionTimestamp
+                        null
                     },
+                    lastInterestCalculationDate = paymentDateMillis,
                     updatedAt = System.currentTimeMillis()
                 )
             )

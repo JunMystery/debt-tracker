@@ -16,5 +16,14 @@ data class Debt(
     val principal: Double = 0.0,
     val isCompleted: Boolean = false,
     val completionTimestamp: Long? = null,
-    val updatedAt: Long = System.currentTimeMillis()
+    val updatedAt: Long = System.currentTimeMillis(),
+    
+    // Multi-type loan fields
+    val interestRate: Double = 0.0,
+    val interestType: InterestType = InterestType.FIXED,
+    val paymentType: PaymentType = PaymentType.INSTALLMENT,
+    val creditLimit: Double = 0.0,
+    val remainingBalance: Double = 0.0,
+    val lastInterestCalculationDate: Long? = null,
+    val minimumPaymentPercent: Double = 0.0
 )

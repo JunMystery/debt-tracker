@@ -23,6 +23,7 @@ import com.example.debt_tracker.ui.components.ConfirmDialog
 import com.example.debt_tracker.ui.components.WheelPickerDialog
 import com.example.debt_tracker.util.CurrencyUtils
 import com.example.debt_tracker.util.DateUtils
+import com.example.debt_tracker.util.LoanCalculator
 import com.example.debt_tracker.util.overrideSlideTransition
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.time.LocalDate
@@ -109,7 +110,14 @@ class DebtDetailActivity : AppCompatActivity() {
     private fun bindDebtDetails(debt: Debt) {
         binding.textCreditor.text = debt.creditorName
         binding.textContract.text = "${getString(R.string.contract_number)}: ${debt.contractNumber}"
-        binding.textMonthlyAmount.text = CurrencyUtils.format(debt.monthlyAmount)
+
+        val nextPayment = LoanCalculator.calculateNextPayment(debt)
+        binding.textMonthlyAmount.text = CurrencyUtils.format(nextPayment)
+        if (debt.interestType == com.example.debt_tracker.data.model.InterestType.REDUCING) {
+            binding.labelMonthlyAmount.text = getString(R.string.suggested_payment)
+        } else {
+            binding.labelMonthlyAmount.text = getString(R.string.monthly_amount)
+        }
 
         // Clipboard Copy contract action
         binding.imageCopy.setOnClickListener {
@@ -144,6 +152,56 @@ class DebtDetailActivity : AppCompatActivity() {
             binding.textPrincipal.visibility = View.GONE
         }
 
+        // Loan Type Display
+        binding.labelLoanType.visibility = View.VISIBLE
+        binding.textLoanType.visibility = View.VISIBLE
+        val interestLabel = when (debt.interestType) {
+            com.example.debt_tracker.data.model.InterestType.FIXED -> getString(R.string.fixed_rate)
+            com.example.debt_tracker.data.model.InterestType.REDUCING -> getString(R.string.reducing_balance)
+            com.example.debt_tracker.data.model.InterestType.ISLAMIC -> getString(R.string.islamic_finance)
+        }
+        val paymentLabel = when (debt.paymentType) {
+            com.example.debt_tracker.data.model.PaymentType.INSTALLMENT -> getString(R.string.installment)
+            com.example.debt_tracker.data.model.PaymentType.INTEREST_ONLY -> getString(R.string.interest_only)
+            com.example.debt_tracker.data.model.PaymentType.CUSTOM -> getString(R.string.custom_payment)
+        }
+        binding.textLoanType.text = "$interestLabel - $paymentLabel"
+
+        // Interest Rate Display
+        if (debt.interestRate > 0) {
+            binding.labelInterestRate.visibility = View.VISIBLE
+            binding.textInterestRate.visibility = View.VISIBLE
+            if (debt.interestType == com.example.debt_tracker.data.model.InterestType.ISLAMIC) {
+                binding.labelInterestRate.text = getString(R.string.profit_rate)
+            } else {
+                binding.labelInterestRate.text = getString(R.string.interest_rate)
+            }
+            binding.textInterestRate.text = String.format(java.util.Locale.US, "%.2f %%", debt.interestRate)
+        } else {
+            binding.labelInterestRate.visibility = View.GONE
+            binding.textInterestRate.visibility = View.GONE
+        }
+
+        // Credit Limit Display
+        if (debt.interestType == com.example.debt_tracker.data.model.InterestType.REDUCING && debt.creditLimit > 0) {
+            binding.labelCreditLimit.visibility = View.VISIBLE
+            binding.textCreditLimit.visibility = View.VISIBLE
+            binding.textCreditLimit.text = CurrencyUtils.format(debt.creditLimit)
+        } else {
+            binding.labelCreditLimit.visibility = View.GONE
+            binding.textCreditLimit.visibility = View.GONE
+        }
+
+        // Remaining Balance Display
+        if (debt.interestType == com.example.debt_tracker.data.model.InterestType.REDUCING || debt.remainingBalance > 0) {
+            binding.labelRemainingBalance.visibility = View.VISIBLE
+            binding.textRemainingBalance.visibility = View.VISIBLE
+            binding.textRemainingBalance.text = CurrencyUtils.format(debt.remainingBalance)
+        } else {
+            binding.labelRemainingBalance.visibility = View.GONE
+            binding.textRemainingBalance.visibility = View.GONE
+        }
+
         // If completed, hide action bar
         if (debt.isCompleted) {
             binding.layoutBottomActions.visibility = View.GONE
@@ -158,7 +216,8 @@ class DebtDetailActivity : AppCompatActivity() {
         dialog.setContentView(bsBinding.root)
 
         // Prefill values
-        bsBinding.editAmount.setText(String.format(java.util.Locale.US, "%.0f", debt.monthlyAmount))
+        val nextPayment = LoanCalculator.calculateNextPayment(debt)
+        bsBinding.editAmount.setText(String.format(java.util.Locale.US, "%.0f", nextPayment))
         var selectedDate = LocalDate.now()
         bsBinding.textSelectedDate.text = DateUtils.formatDay(selectedDate)
 

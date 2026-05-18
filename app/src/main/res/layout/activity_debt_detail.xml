@@ -98,10 +98,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:columnCount="2"
-                            android:rowCount="5"
+                            android:rowCount="10"
                             android:useDefaultMargins="true">
 
                             <TextView
+                                android:id="@+id/labelMonthlyAmount"
                                 android:layout_columnWeight="1"
                                 android:text="@string/monthly_amount"
                                 android:textColor="@color/dt_secondary"
@@ -183,6 +184,86 @@
                                 android:textSize="14sp"
                                 android:visibility="gone"
                                 tools:text="100.000.000 ₫" />
+
+                            <!-- Loan Type Display -->
+                            <TextView
+                                android:id="@+id/labelLoanType"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="Loại khoản vay"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/textLoanType"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                tools:text="Cố định - Trả góp" />
+
+                            <!-- Interest/Profit Rate Display -->
+                            <TextView
+                                android:id="@+id/labelInterestRate"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/interest_rate"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/textInterestRate"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                tools:text="5.5 %" />
+
+                            <!-- Credit Limit Display -->
+                            <TextView
+                                android:id="@+id/labelCreditLimit"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/credit_limit"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/textCreditLimit"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                tools:text="50.000.000 ₫" />
+
+                            <!-- Remaining Balance Display -->
+                            <TextView
+                                android:id="@+id/labelRemainingBalance"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/remaining_balance"
+                                android:textColor="@color/dt_secondary"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/textRemainingBalance"
+                                android:layout_columnWeight="1"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:textColor="@color/dt_on_surface"
+                                android:textSize="14sp"
+                                android:visibility="gone"
+                                tools:text="35.000.000 ₫" />
                         </GridLayout>
 
                     </LinearLayout>
