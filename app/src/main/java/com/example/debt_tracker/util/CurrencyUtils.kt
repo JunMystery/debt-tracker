@@ -56,12 +56,10 @@ object CurrencyUtils {
     }
 
     /**
-     * Synchronously converts and formats an amount from its native currency to the preferred currency.
+     * Formats an amount in its native base currency.
      */
     fun getFormattedAmount(context: Context, amount: Double, fromCurrency: String): String {
-        val targetCurrency = getPreferredCurrency(context)
-        val converted = ExchangeRateService.convert(amount, fromCurrency, targetCurrency)
-        return format(converted, targetCurrency)
+        return format(amount, fromCurrency)
     }
 
     /**
