@@ -24,7 +24,11 @@ import com.example.debt_tracker.util.DateUtils
 import com.example.debt_tracker.util.overrideSlideTransition
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import com.example.debt_tracker.ui.components.ConfirmDialog
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,13 +47,29 @@ class MainActivity : AppCompatActivity() {
 
         // Set up recycler view
         binding.recyclerUpcoming.layoutManager = LinearLayoutManager(this)
-        adapter = UpcomingAdapter { debtWithNextDue ->
-            val intent = Intent(this, DebtDetailActivity::class.java).apply {
-                putExtra("DEBT_ID", debtWithNextDue.debt.id)
+        adapter = UpcomingAdapter(
+            onItemClick = { debtWithNextDue ->
+                val intent = Intent(this, DebtDetailActivity::class.java).apply {
+                    putExtra("DEBT_ID", debtWithNextDue.debt.id)
+                }
+                startActivity(intent)
+                overrideSlideTransition(true)
+            },
+            onItemLongClick = { debtWithNextDue ->
+                ConfirmDialog.show(
+                    this@MainActivity,
+                    getString(R.string.confirm_delete_title),
+                    getString(R.string.confirm_delete_message)
+                ) {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            repository.deleteDebt(debtWithNextDue.debt.id)
+                        }
+                        Toast.makeText(this@MainActivity, R.string.debt_deleted, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
-            startActivity(intent)
-            overrideSlideTransition(true)
-        }
+        )
         binding.recyclerUpcoming.adapter = adapter
 
         // Observe dashboard data
@@ -99,7 +119,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private class UpcomingAdapter(
-        private val onItemClick: (DebtWithNextDue) -> Unit
+        private val onItemClick: (DebtWithNextDue) -> Unit,
+        private val onItemLongClick: (DebtWithNextDue) -> Unit
     ) : RecyclerView.Adapter<UpcomingAdapter.ViewHolder>() {
 
         private var list: List<DebtWithNextDue> = emptyList()
@@ -111,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val binding = ItemDebtCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ViewHolder(binding, onItemClick)
+            return ViewHolder(binding, onItemClick, onItemLongClick)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -122,7 +143,8 @@ class MainActivity : AppCompatActivity() {
 
         class ViewHolder(
             private val binding: ItemDebtCardBinding,
-            private val onItemClick: (DebtWithNextDue) -> Unit
+            private val onItemClick: (DebtWithNextDue) -> Unit,
+            private val onItemLongClick: (DebtWithNextDue) -> Unit
         ) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(item: DebtWithNextDue) {
@@ -164,6 +186,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 itemView.setOnClickListener { onItemClick(item) }
+                itemView.setOnLongClickListener {
+                    onItemLongClick(item)
+                    true
+                }
             }
         }
     }

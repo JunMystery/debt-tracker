@@ -51,13 +51,26 @@ class DebtListActivity : AppCompatActivity() {
 
         // Set up RecyclerView
         binding.recyclerDebts.layoutManager = LinearLayoutManager(this)
-        adapter = DebtListAdapter { debtWithNextDue ->
-            val intent = Intent(this, DebtDetailActivity::class.java).apply {
-                putExtra("DEBT_ID", debtWithNextDue.debt.id)
+        adapter = DebtListAdapter(
+            onItemClick = { debtWithNextDue ->
+                val intent = Intent(this, DebtDetailActivity::class.java).apply {
+                    putExtra("DEBT_ID", debtWithNextDue.debt.id)
+                }
+                startActivity(intent)
+                overrideSlideTransition(true)
+            },
+            onItemLongClick = { debtWithNextDue ->
+                ConfirmDialog.show(
+                    this@DebtListActivity,
+                    getString(R.string.confirm_delete_title),
+                    getString(R.string.confirm_delete_message)
+                ) {
+                    controller.deleteDebt(debtWithNextDue.debt.id) {
+                        Toast.makeText(this@DebtListActivity, R.string.debt_deleted, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
-            startActivity(intent)
-            overrideSlideTransition(true)
-        }
+        )
         binding.recyclerDebts.adapter = adapter
 
         // Set up Swipe-to-Delete
@@ -136,7 +149,8 @@ class DebtListActivity : AppCompatActivity() {
     }
 
     private class DebtListAdapter(
-        private val onItemClick: (DebtWithNextDue) -> Unit
+        private val onItemClick: (DebtWithNextDue) -> Unit,
+        private val onItemLongClick: (DebtWithNextDue) -> Unit
     ) : RecyclerView.Adapter<DebtListAdapter.ViewHolder>() {
 
         private var list: List<DebtWithNextDue> = emptyList()
@@ -150,7 +164,7 @@ class DebtListActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val binding = ItemDebtCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ViewHolder(binding, onItemClick)
+            return ViewHolder(binding, onItemClick, onItemLongClick)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -161,7 +175,8 @@ class DebtListActivity : AppCompatActivity() {
 
         class ViewHolder(
             private val binding: ItemDebtCardBinding,
-            private val onItemClick: (DebtWithNextDue) -> Unit
+            private val onItemClick: (DebtWithNextDue) -> Unit,
+            private val onItemLongClick: (DebtWithNextDue) -> Unit
         ) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(item: DebtWithNextDue) {
@@ -201,6 +216,10 @@ class DebtListActivity : AppCompatActivity() {
                 }
 
                 itemView.setOnClickListener { onItemClick(item) }
+                itemView.setOnLongClickListener {
+                    onItemLongClick(item)
+                    true
+                }
             }
         }
     }
