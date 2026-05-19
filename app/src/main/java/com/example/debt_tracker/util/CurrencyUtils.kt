@@ -29,6 +29,12 @@ object CurrencyUtils {
         return formatter.format(value)
     }
 
+    fun getFormattedAmount(amount: Double, fromCurrency: String): String {
+        val targetCurrency = getCurrencyCode()
+        val converted = ExchangeRateService.convert(amount, fromCurrency, targetCurrency)
+        return format(converted)
+    }
+
     fun getCurrencyCode(): String {
         return getCurrencyCodeForLocale(Locale.getDefault())
     }

@@ -53,6 +53,15 @@ class MainActivity : AppCompatActivity() {
         }
         binding.recyclerUpcoming.adapter = adapter
 
+        // Pre-fetch latest exchange rates in the background for smooth auto-conversion
+        lifecycleScope.launch {
+            try {
+                ExchangeRateService.loadRates()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         // Observe dashboard data
         controller.dashboardData.observe(this) { data ->
             binding.textTotalDue.text = CurrencyUtils.format(data.totalDueThisMonth)
@@ -103,57 +112,62 @@ class MainActivity : AppCompatActivity() {
         val targetCurrency = if (activeCurrency == "USD") "VND" else "USD"
 
         lifecycleScope.launch {
-            val fetchCurrency = if (activeCurrency == "USD") targetCurrency else activeCurrency
-            val rate = ExchangeRateService.getUsdToTargetRate(fetchCurrency)
-            
-            if (rate != null && rate > 0) {
-                val convertedAmount: Double
-                val formattedConverted: String
-                val rateString: String
+            try {
+                val fetchCurrency = if (activeCurrency == "USD") targetCurrency else activeCurrency
+                val rate = ExchangeRateService.getUsdToTargetRate(fetchCurrency)
+                
+                if (rate != null && rate > 0) {
+                    val convertedAmount: Double
+                    val formattedConverted: String
+                    val rateString: String
 
-                if (activeCurrency == "USD") {
-                    // Native is USD, target is VND
-                    convertedAmount = totalDue * rate
-                    
-                    val vndFormatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("vi", "VN"))
-                    vndFormatter.maximumFractionDigits = 0
-                    formattedConverted = vndFormatter.format(convertedAmount)
-                    
-                    val usdFormatter = java.text.NumberFormat.getNumberInstance(java.util.Locale.US)
-                    rateString = "${usdFormatter.format(rate)} VND/USD"
+                    if (activeCurrency == "USD") {
+                        // Native is USD, target is VND
+                        convertedAmount = totalDue * rate
+                        
+                        val vndFormatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("vi", "VN"))
+                        vndFormatter.maximumFractionDigits = 0
+                        formattedConverted = vndFormatter.format(convertedAmount)
+                        
+                        val usdFormatter = java.text.NumberFormat.getNumberInstance(java.util.Locale.US)
+                        rateString = "${usdFormatter.format(rate)} VND/USD"
+                    } else {
+                        // Native is other currency, target is USD
+                        convertedAmount = totalDue / rate
+                        
+                        val usdFormatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.US)
+                        formattedConverted = usdFormatter.format(convertedAmount)
+                        
+                        val activeLocale = when (activeCurrency) {
+                            "GBP" -> java.util.Locale.UK
+                            "VND" -> java.util.Locale("vi", "VN")
+                            "CNY" -> java.util.Locale.CHINA
+                            "JPY" -> java.util.Locale.JAPAN
+                            "KRW" -> java.util.Locale.KOREA
+                            else -> java.util.Locale.getDefault()
+                        }
+                        val rateFormatter = java.text.NumberFormat.getNumberInstance(activeLocale)
+                        val symbol = when (activeCurrency) {
+                            "GBP" -> "£"
+                            "VND" -> "₫"
+                            "CNY" -> "¥"
+                            "JPY" -> "¥"
+                            "KRW" -> "₩"
+                            else -> activeCurrency
+                        }
+                        rateString = "${rateFormatter.format(rate)} $symbol/USD"
+                    }
+
+                    binding.textConvertedDue.text = getString(
+                        R.string.exchange_rate_format,
+                        formattedConverted,
+                        rateString
+                    )
                 } else {
-                    // Native is other currency, target is USD
-                    convertedAmount = totalDue / rate
-                    
-                    val usdFormatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.US)
-                    formattedConverted = usdFormatter.format(convertedAmount)
-                    
-                    val activeLocale = when (activeCurrency) {
-                        "GBP" -> java.util.Locale.UK
-                        "VND" -> java.util.Locale("vi", "VN")
-                        "CNY" -> java.util.Locale.CHINA
-                        "JPY" -> java.util.Locale.JAPAN
-                        "KRW" -> java.util.Locale.KOREA
-                        else -> java.util.Locale.getDefault()
-                    }
-                    val rateFormatter = java.text.NumberFormat.getNumberInstance(activeLocale)
-                    val symbol = when (activeCurrency) {
-                        "GBP" -> "£"
-                        "VND" -> "₫"
-                        "CNY" -> "¥"
-                        "JPY" -> "¥"
-                        "KRW" -> "₩"
-                        else -> activeCurrency
-                    }
-                    rateString = "${rateFormatter.format(rate)} $symbol/USD"
+                    binding.textConvertedDue.visibility = View.GONE
                 }
-
-                binding.textConvertedDue.text = getString(
-                    R.string.exchange_rate_format,
-                    formattedConverted,
-                    rateString
-                )
-            } else {
+            } catch (e: Exception) {
+                e.printStackTrace()
                 binding.textConvertedDue.visibility = View.GONE
             }
         }
@@ -192,7 +206,7 @@ class MainActivity : AppCompatActivity() {
 
                 binding.textCreditorName.text = debt.creditorName
                 binding.textContractNumber.text = debt.contractNumber
-                binding.textAmount.text = CurrencyUtils.format(debt.monthlyAmount)
+                binding.textAmount.text = CurrencyUtils.getFormattedAmount(debt.monthlyAmount, debt.currencyCode)
 
                 // Compute status & due date text
                 val nextDue = item.nextDueDate

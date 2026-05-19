@@ -13,9 +13,14 @@ object DateUtils {
 
     fun formatDay(date: LocalDate): String {
         val locale = java.util.Locale.getDefault()
-        val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "ddMMyyyy")
-        val formatter = DateTimeFormatter.ofPattern(pattern, locale)
-        return date.format(formatter)
+        return try {
+            val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "ddMMyyyy")
+            val formatter = DateTimeFormatter.ofPattern(pattern, locale)
+            date.format(formatter)
+        } catch (e: Exception) {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)
+            date.format(formatter)
+        }
     }
 
     fun formatDay(timestampMillis: Long): String {
@@ -25,9 +30,14 @@ object DateUtils {
 
     fun formatMonthYear(yearMonth: YearMonth): String {
         val locale = java.util.Locale.getDefault()
-        val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "MMyyyy")
-        val formatter = DateTimeFormatter.ofPattern(pattern, locale)
-        return yearMonth.format(formatter)
+        return try {
+            val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "MMyyyy")
+            val formatter = DateTimeFormatter.ofPattern(pattern, locale)
+            yearMonth.format(formatter)
+        } catch (e: Exception) {
+            val formatter = DateTimeFormatter.ofPattern("MM/yyyy", locale)
+            yearMonth.format(formatter)
+        }
     }
 
     fun nowYearMonth(): YearMonth = YearMonth.now()

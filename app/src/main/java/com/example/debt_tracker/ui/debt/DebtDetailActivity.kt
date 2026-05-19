@@ -83,7 +83,7 @@ class DebtDetailActivity : AppCompatActivity() {
             } else {
                 binding.textNoPayments.visibility = View.GONE
                 binding.recyclerPayments.visibility = View.VISIBLE
-                adapter.submitList(payments)
+                adapter.submitList(payments, currentDebt?.currencyCode ?: "USD")
             }
         }
 
@@ -112,7 +112,7 @@ class DebtDetailActivity : AppCompatActivity() {
         binding.textContract.text = "${getString(R.string.contract_number)}: ${debt.contractNumber}"
 
         val nextPayment = LoanCalculator.calculateNextPayment(debt)
-        binding.textMonthlyAmount.text = CurrencyUtils.format(nextPayment)
+        binding.textMonthlyAmount.text = CurrencyUtils.getFormattedAmount(nextPayment, debt.currencyCode)
         if (debt.interestType == com.example.debt_tracker.data.model.InterestType.REDUCING) {
             binding.labelMonthlyAmount.text = getString(R.string.suggested_payment)
         } else {
@@ -140,13 +140,13 @@ class DebtDetailActivity : AppCompatActivity() {
         binding.textRemainingMonths.text = getString(R.string.remaining_months, remaining).replace("Số tháng còn lại: ", "")
 
         // Total paid
-        binding.textTotalPaid.text = CurrencyUtils.format(debt.totalPaid)
+        binding.textTotalPaid.text = CurrencyUtils.getFormattedAmount(debt.totalPaid, debt.currencyCode)
 
         // Principal display if set
         if (debt.principal > 0) {
             binding.labelPrincipal.visibility = View.VISIBLE
             binding.textPrincipal.visibility = View.VISIBLE
-            binding.textPrincipal.text = CurrencyUtils.format(debt.principal)
+            binding.textPrincipal.text = CurrencyUtils.getFormattedAmount(debt.principal, debt.currencyCode)
         } else {
             binding.labelPrincipal.visibility = View.GONE
             binding.textPrincipal.visibility = View.GONE
@@ -186,7 +186,7 @@ class DebtDetailActivity : AppCompatActivity() {
         if (debt.interestType == com.example.debt_tracker.data.model.InterestType.REDUCING && debt.creditLimit > 0) {
             binding.labelCreditLimit.visibility = View.VISIBLE
             binding.textCreditLimit.visibility = View.VISIBLE
-            binding.textCreditLimit.text = CurrencyUtils.format(debt.creditLimit)
+            binding.textCreditLimit.text = CurrencyUtils.getFormattedAmount(debt.creditLimit, debt.currencyCode)
         } else {
             binding.labelCreditLimit.visibility = View.GONE
             binding.textCreditLimit.visibility = View.GONE
@@ -196,7 +196,7 @@ class DebtDetailActivity : AppCompatActivity() {
         if (debt.interestType == com.example.debt_tracker.data.model.InterestType.REDUCING || debt.remainingBalance > 0) {
             binding.labelRemainingBalance.visibility = View.VISIBLE
             binding.textRemainingBalance.visibility = View.VISIBLE
-            binding.textRemainingBalance.text = CurrencyUtils.format(debt.remainingBalance)
+            binding.textRemainingBalance.text = CurrencyUtils.getFormattedAmount(debt.remainingBalance, debt.currencyCode)
         } else {
             binding.labelRemainingBalance.visibility = View.GONE
             binding.textRemainingBalance.visibility = View.GONE
@@ -266,9 +266,11 @@ class DebtDetailActivity : AppCompatActivity() {
     private class PaymentAdapter : RecyclerView.Adapter<PaymentAdapter.ViewHolder>() {
 
         private var list: List<Payment> = emptyList()
+        private var currencyCode: String = "USD"
 
-        fun submitList(newList: List<Payment>) {
+        fun submitList(newList: List<Payment>, currency: String) {
             list = newList
+            currencyCode = currency
             notifyDataSetChanged()
         }
 
@@ -278,15 +280,15 @@ class DebtDetailActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(list[position])
+            holder.bind(list[position], currencyCode)
         }
 
         override fun getItemCount(): Int = list.size
 
         class ViewHolder(private val binding: ItemPaymentBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun bind(payment: Payment) {
+            fun bind(payment: Payment, currency: String) {
                 binding.textPaymentDate.text = DateUtils.formatDay(payment.paymentDate)
-                binding.textPaymentAmount.text = "+${CurrencyUtils.format(payment.amount)}"
+                binding.textPaymentAmount.text = "+${CurrencyUtils.getFormattedAmount(payment.amount, currency)}"
             }
         }
     }

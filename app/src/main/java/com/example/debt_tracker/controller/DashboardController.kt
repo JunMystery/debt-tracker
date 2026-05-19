@@ -37,7 +37,14 @@ class DashboardController(
     private fun buildDashboardData(debts: List<Debt>, payments: List<Payment>): DashboardData {
         val currentMonth = DateUtils.nowYearMonth()
         val activeDebts = debts.filter { !it.isCompleted && DateUtils.isActiveForMonth(it, currentMonth) }
-        val totalDue = activeDebts.sumOf { it.monthlyAmount }
+        val targetCurrency = com.example.debt_tracker.util.CurrencyUtils.getCurrencyCode()
+        val totalDue = activeDebts.sumOf { debt ->
+            com.example.debt_tracker.util.ExchangeRateService.convert(
+                debt.monthlyAmount,
+                debt.currencyCode,
+                targetCurrency
+            )
+        }
 
         val paidDebtIdsThisMonth = payments
             .filter { payment ->

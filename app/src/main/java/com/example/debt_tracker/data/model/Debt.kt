@@ -25,5 +25,6 @@ data class Debt(
     val creditLimit: Double = 0.0,
     val remainingBalance: Double = 0.0,
     val lastInterestCalculationDate: Long? = null,
-    val minimumPaymentPercent: Double = 0.0
+    val minimumPaymentPercent: Double = 0.0,
+    val currencyCode: String = "USD"
 )

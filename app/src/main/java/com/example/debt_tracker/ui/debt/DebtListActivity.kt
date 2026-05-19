@@ -170,7 +170,7 @@ class DebtListActivity : AppCompatActivity() {
 
                 binding.textCreditorName.text = debt.creditorName
                 binding.textContractNumber.text = debt.contractNumber
-                binding.textAmount.text = CurrencyUtils.format(debt.monthlyAmount)
+                binding.textAmount.text = CurrencyUtils.getFormattedAmount(debt.monthlyAmount, debt.currencyCode)
 
                 // Compute status & due date text
                 val nextDue = item.nextDueDate

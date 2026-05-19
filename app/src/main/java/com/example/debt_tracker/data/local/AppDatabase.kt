@@ -12,7 +12,7 @@ import com.example.debt_tracker.data.dao.PaymentDao
 import com.example.debt_tracker.data.model.Debt
 import com.example.debt_tracker.data.model.Payment
 
-@Database(entities = [Debt::class, Payment::class], version = 2, exportSchema = false)
+@Database(entities = [Debt::class, Payment::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun debtDao(): DebtDao
@@ -34,6 +34,12 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE debts ADD COLUMN currencyCode TEXT NOT NULL DEFAULT 'USD'")
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
@@ -41,7 +47,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "debt-tracker.db"
                 )
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build().also { INSTANCE = it }
             }
         }

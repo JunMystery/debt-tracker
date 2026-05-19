@@ -15,6 +15,7 @@ import com.example.debt_tracker.ui.components.WheelPickerDialog
 import com.example.debt_tracker.util.overrideSlideTransition
 import java.time.LocalDate
 import java.time.YearMonth
+import com.example.debt_tracker.util.CurrencyTextWatcher
 
 class CreateEditDebtActivity : AppCompatActivity() {
 
@@ -27,6 +28,19 @@ class CreateEditDebtActivity : AppCompatActivity() {
 
     private var selectedInterestType = com.example.debt_tracker.data.model.InterestType.FIXED
     private var selectedPaymentType = com.example.debt_tracker.data.model.PaymentType.INSTALLMENT
+
+    private var rawAmount: Double = 0.0
+    private var rawCreditLimit: Double = 0.0
+
+    private fun setupCurrencyWatchers(currency: String) {
+        binding.editAmount.addTextChangedListener(CurrencyTextWatcher(binding.editAmount, currency) { value ->
+            rawAmount = value
+            calculateAndSetPrincipal()
+        })
+        binding.editCreditLimit.addTextChangedListener(CurrencyTextWatcher(binding.editCreditLimit, currency) { value ->
+            rawCreditLimit = value
+        })
+    }
 
     // Date picker variables
     private var selectedDueDay = 15
@@ -63,6 +77,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
         } else {
             binding.toolbar.title = getString(R.string.create_debt)
             updateDatePickersUI()
+            setupCurrencyWatchers(com.example.debt_tracker.util.CurrencyUtils.getCurrencyCode())
         }
 
         // Click pickers
@@ -101,13 +116,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
             }
         }
 
-        binding.editAmount.addTextChangedListener(object : android.text.TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: android.text.Editable?) {
-                calculateAndSetPrincipal()
-            }
-        })
+        // Empty block - replaced by setupCurrencyWatchers
 
         // Action listeners
         binding.btnCancel.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
@@ -138,9 +147,19 @@ class CreateEditDebtActivity : AppCompatActivity() {
             if (debt == null) return@observe
             if (originalDebt == null) {
                 originalDebt = debt
-                binding.editCreditor.setText(debt.creditorName)
-                binding.editContract.setText(debt.contractNumber)
-                binding.editAmount.setText(String.format(java.util.Locale.US, "%.0f", debt.monthlyAmount))
+                val activeCurrency = debt.currencyCode
+                setupCurrencyWatchers(activeCurrency)
+
+                // USD/GBP/CNY/EUR/TWD use cents, so scale raw digits correctly for watcher initialization
+                val rawAmountVal = debt.monthlyAmount
+                val isCentsCurrency = activeCurrency.uppercase() in listOf("USD", "GBP", "CNY", "EUR", "TWD")
+                val amountText = if (isCentsCurrency) {
+                    String.format(java.util.Locale.US, "%.0f", rawAmountVal * 100)
+                } else {
+                    String.format(java.util.Locale.US, "%.0f", rawAmountVal)
+                }
+                binding.editAmount.setText(amountText)
+
                 if (debt.principal > 0) {
                     binding.editPrincipal.setText(String.format(java.util.Locale.US, "%.0f", debt.principal))
                 }
@@ -159,7 +178,13 @@ class CreateEditDebtActivity : AppCompatActivity() {
                 selectedPaymentType = debt.paymentType
 
                 binding.editInterestRate.setText(String.format(java.util.Locale.US, "%.2f", debt.interestRate))
-                binding.editCreditLimit.setText(String.format(java.util.Locale.US, "%.0f", debt.creditLimit))
+                val rawLimitVal = debt.creditLimit
+                val limitText = if (isCentsCurrency) {
+                    String.format(java.util.Locale.US, "%.0f", rawLimitVal * 100)
+                } else {
+                    String.format(java.util.Locale.US, "%.0f", rawLimitVal)
+                }
+                binding.editCreditLimit.setText(limitText)
                 binding.editMinPaymentPercent.setText(String.format(java.util.Locale.US, "%.2f", debt.minimumPaymentPercent))
 
                 binding.interestTypeDropdown.setText(getInterestTypeLabel(debt.interestType), false)
@@ -184,18 +209,13 @@ class CreateEditDebtActivity : AppCompatActivity() {
         val amountStr = binding.editAmount.text.toString().trim()
         val principalStr = binding.editPrincipal.text.toString().trim()
 
-        // Validation
-        if (creditor.isEmpty() || contract.isEmpty() || amountStr.isEmpty()) {
+        // Validation using raw amounts from watches
+        if (creditor.isEmpty() || contract.isEmpty() || rawAmount <= 0) {
             Toast.makeText(this, R.string.validation_required, Toast.LENGTH_SHORT).show()
             return
         }
 
-        val amount = amountStr.toDoubleOrNull() ?: 0.0
-        if (amount <= 0) {
-            Toast.makeText(this, R.string.validation_positive_amount, Toast.LENGTH_SHORT).show()
-            return
-        }
-
+        val amount = rawAmount
         val principal = principalStr.toDoubleOrNull() ?: 0.0
 
         val startYM = YearMonth.of(selectedStartYear, selectedStartMonth)
@@ -205,11 +225,11 @@ class CreateEditDebtActivity : AppCompatActivity() {
             return
         }
 
-        val startYearMonthStr = String.format("%04d-%02d", selectedStartYear, selectedStartMonth)
-        val endYearMonthStr = String.format("%04d-%02d", selectedEndYear, selectedEndMonth)
+        val startYearMonthStr = String.format(java.util.Locale.US, "%04d-%02d", selectedStartYear, selectedStartMonth)
+        val endYearMonthStr = String.format(java.util.Locale.US, "%04d-%02d", selectedEndYear, selectedEndMonth)
 
         val interestRate = binding.editInterestRate.text.toString().trim().toDoubleOrNull() ?: 0.0
-        val creditLimit = binding.editCreditLimit.text.toString().trim().toDoubleOrNull() ?: 0.0
+        val creditLimit = rawCreditLimit
         val minPaymentPercent = binding.editMinPaymentPercent.text.toString().trim().toDoubleOrNull() ?: 0.0
 
         val remainingBalance = if (isEditMode) {
@@ -249,7 +269,8 @@ class CreateEditDebtActivity : AppCompatActivity() {
             paymentType = selectedPaymentType,
             creditLimit = creditLimit,
             remainingBalance = remainingBalance,
-            minimumPaymentPercent = minPaymentPercent
+            minimumPaymentPercent = minPaymentPercent,
+            currencyCode = com.example.debt_tracker.util.CurrencyUtils.getCurrencyCode()
         )
 
         if (isEditMode) {
@@ -276,12 +297,12 @@ class CreateEditDebtActivity : AppCompatActivity() {
 
         if (isEditMode) {
             val orig = originalDebt ?: return false
-            val startYM = String.format("%04d-%02d", selectedStartYear, selectedStartMonth)
-            val endYM = String.format("%04d-%02d", selectedEndYear, selectedEndMonth)
-            val amount = amountStr.toDoubleOrNull() ?: 0.0
+            val startYM = String.format(java.util.Locale.US, "%04d-%02d", selectedStartYear, selectedStartMonth)
+            val endYM = String.format(java.util.Locale.US, "%04d-%02d", selectedEndYear, selectedEndMonth)
+            val amount = rawAmount
             val principal = principalStr.toDoubleOrNull() ?: 0.0
             val interestRate = interestRateStr.toDoubleOrNull() ?: 0.0
-            val creditLimit = creditLimitStr.toDoubleOrNull() ?: 0.0
+            val creditLimit = rawCreditLimit
             val minPaymentPercent = minPaymentPercentStr.toDoubleOrNull() ?: 0.0
 
             return orig.creditorName != creditor ||
@@ -313,16 +334,15 @@ class CreateEditDebtActivity : AppCompatActivity() {
     }
 
     private fun calculateAndSetPrincipal() {
-        val amountStr = binding.editAmount.text.toString().trim()
-        val amount = amountStr.toDoubleOrNull() ?: 0.0
+        val amount = rawAmount
 
         val startYM = YearMonth.of(selectedStartYear, selectedStartMonth)
         val endYM = YearMonth.of(selectedEndYear, selectedEndMonth)
 
         if (amount > 0 && !endYM.isBefore(startYM)) {
             val months = com.example.debt_tracker.util.DateUtils.monthsBetweenInclusive(
-                String.format("%04d-%02d", selectedStartYear, selectedStartMonth),
-                String.format("%04d-%02d", selectedEndYear, selectedEndMonth)
+                String.format(java.util.Locale.US, "%04d-%02d", selectedStartYear, selectedStartMonth),
+                String.format(java.util.Locale.US, "%04d-%02d", selectedEndYear, selectedEndMonth)
             )
             val calculatedPrincipal = amount * months
             binding.editPrincipal.setText(String.format(java.util.Locale.US, "%.0f", calculatedPrincipal))

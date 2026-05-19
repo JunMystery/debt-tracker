@@ -48,7 +48,7 @@ class CsvBackupManager(
             ?: error("Cannot open backup output stream")
 
         OutputStreamWriter(output).use { writer ->
-            writer.appendLine("ID,Creditor,Contract,MonthlyAmount,DueDay,Start,End,TotalPaid,Principal,Completed,InterestRate,InterestType,PaymentType,CreditLimit,RemainingBalance,LastInterestCalc,MinPaymentPercent")
+            writer.appendLine("ID,Creditor,Contract,MonthlyAmount,DueDay,Start,End,TotalPaid,Principal,Completed,InterestRate,InterestType,PaymentType,CreditLimit,RemainingBalance,LastInterestCalc,MinPaymentPercent,CurrencyCode")
             debts.forEach { debt ->
                 writer.appendLine(
                     listOf(
@@ -68,7 +68,8 @@ class CsvBackupManager(
                         debt.creditLimit,
                         debt.remainingBalance,
                         debt.lastInterestCalculationDate ?: "",
-                        debt.minimumPaymentPercent
+                        debt.minimumPaymentPercent,
+                        debt.currencyCode
                     ).joinToString(",")
                 )
             }
@@ -179,6 +180,7 @@ class CsvBackupManager(
                             var remainingBalance = totalPaid
                             var lastInterestCalc: Long? = null
                             var minPaymentPercent = 0.0
+                            var currencyCode = "USD"
 
                             if (parts.size >= 17) {
                                 interestRate = parts[10].toDoubleOrNull() ?: 0.0
@@ -196,6 +198,9 @@ class CsvBackupManager(
                                 remainingBalance = parts[14].toDoubleOrNull() ?: 0.0
                                 lastInterestCalc = parts[15].toLongOrNull()
                                 minPaymentPercent = parts[16].toDoubleOrNull() ?: 0.0
+                                if (parts.size >= 18) {
+                                    currencyCode = parts[17].trim()
+                                }
                             } else {
                                 remainingBalance = if (completed) 0.0 else maxOf(principal - totalPaid, 0.0)
                             }
@@ -219,6 +224,7 @@ class CsvBackupManager(
                                     remainingBalance = remainingBalance,
                                     lastInterestCalculationDate = lastInterestCalc,
                                     minimumPaymentPercent = minPaymentPercent,
+                                    currencyCode = currencyCode,
                                     updatedAt = System.currentTimeMillis()
                                 )
                             )
