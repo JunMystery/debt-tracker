@@ -8,6 +8,7 @@
     <string name="upcoming_debts">Upcoming</string>
     <string name="add_debt">Add Debt</string>
     <string name="edit_debt">Edit Debt</string>
+    <string name="edit_short">Edit</string>
     <string name="create_debt">Create New Debt</string>
     <string name="debt_detail">Debt Details</string>
     <string name="current_debts">Active</string>

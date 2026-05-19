@@ -62,10 +62,12 @@ object DateUtils {
         }
     }
 
-    fun remainingMonths(endYearMonth: String, from: YearMonth = nowYearMonth()): Int {
+    fun remainingMonths(startYearMonth: String, endYearMonth: String, from: YearMonth = nowYearMonth()): Int {
         return try {
+            val start = parseYearMonth(startYearMonth)
             val end = parseYearMonth(endYearMonth)
-            val value = (end.year - from.year) * 12 + (end.monthValue - from.monthValue) + 1
+            val startPoint = if (from < start) start else from
+            val value = (end.year - startPoint.year) * 12 + (end.monthValue - startPoint.monthValue) + 1
             value.coerceAtLeast(0)
         } catch (e: Exception) {
             0

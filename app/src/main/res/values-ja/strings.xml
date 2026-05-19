@@ -8,6 +8,7 @@
     <string name="upcoming_debts">期日間近</string>
     <string name="add_debt">債務を追加</string>
     <string name="edit_debt">債務を編集</string>
+    <string name="edit_short">編集</string>
     <string name="create_debt">新しい債務を作成</string>
     <string name="debt_detail">債務の詳細</string>
     <string name="current_debts">未完済</string>

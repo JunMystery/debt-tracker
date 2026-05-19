@@ -1,3 +1,5 @@
 {
-    "java.configuration.updateBuildConfiguration": "disabled"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "java.jdt.ls.java.home": "C:\\Users\\Jun\\.gradle\\jdks\\eclipse_adoptium-21-amd64-windows.2",
+    "java.import.gradle.java.home": "C:\\Users\\Jun\\.gradle\\jdks\\eclipse_adoptium-21-amd64-windows.2"
 }

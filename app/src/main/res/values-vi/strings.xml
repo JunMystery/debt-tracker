@@ -8,6 +8,7 @@
     <string name="upcoming_debts">Sắp đến hạn</string>
     <string name="add_debt">Thêm khoản vay</string>
     <string name="edit_debt">Sửa khoản vay</string>
+    <string name="edit_short">Sửa</string>
     <string name="create_debt">Tạo khoản vay mới</string>
     <string name="debt_detail">Chi tiết khoản vay</string>
     <string name="current_debts">Đang trả</string>

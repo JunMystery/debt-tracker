@@ -136,7 +136,7 @@ class DebtDetailActivity : AppCompatActivity() {
         }
 
         // Remaining months
-        val remaining = DateUtils.remainingMonths(debt.endYearMonth)
+        val remaining = DateUtils.remainingMonths(debt.startYearMonth, debt.endYearMonth)
         binding.textRemainingMonths.text = getString(R.string.months_format, remaining)
 
         // Total paid

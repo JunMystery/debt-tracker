@@ -23,6 +23,10 @@ import com.example.debt_tracker.util.DateUtils
 import com.example.debt_tracker.util.overrideSlideTransition
 import com.google.android.material.tabs.TabLayout
 import java.time.LocalDate
+import com.example.debt_tracker.ui.components.OptionsDialog
+import com.example.debt_tracker.util.SwipeRevealTouchListener
+import android.graphics.Rect
+import android.view.MotionEvent
 
 class DebtListActivity : AppCompatActivity() {
 
@@ -60,54 +64,42 @@ class DebtListActivity : AppCompatActivity() {
                 overrideSlideTransition(true)
             },
             onItemLongClick = { debtWithNextDue ->
-                ConfirmDialog.show(
+                OptionsDialog.show(
                     this@DebtListActivity,
-                    getString(R.string.confirm_delete_title),
-                    getString(R.string.confirm_delete_message)
-                ) {
-                    controller.deleteDebt(debtWithNextDue.debt.id) {
-                        Toast.makeText(this@DebtListActivity, R.string.debt_deleted, Toast.LENGTH_SHORT).show()
+                    debtWithNextDue.debt.creditorName,
+                    onEdit = {
+                        val intent = Intent(this@DebtListActivity, CreateEditDebtActivity::class.java).apply {
+                            putExtra("DEBT_ID", debtWithNextDue.debt.id)
+                        }
+                        startActivity(intent)
+                        overrideSlideTransition(true)
+                    },
+                    onDelete = {
+                        showDeleteConfirmation(debtWithNextDue)
                     }
-                }
+                )
+            },
+            onDeleteClick = { debtWithNextDue ->
+                showDeleteConfirmation(debtWithNextDue)
+            },
+            isSwipeEnabled = {
+                binding.tabLayout.selectedTabPosition == 0
             }
         )
         binding.recyclerDebts.adapter = adapter
 
-        // Set up Swipe-to-Delete
-        val swipeHandler = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean = false
-
-            override fun getSwipeDirs(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-            ): Int {
-                // Disable swipe to delete on completed debts tab
-                if (binding.tabLayout.selectedTabPosition == 1) return 0
-                return super.getSwipeDirs(recyclerView, viewHolder)
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.bindingAdapterPosition
-                val item = adapter.getItemAt(position)
-
-                ConfirmDialog.show(
-                    this@DebtListActivity,
-                    getString(R.string.confirm_delete_title),
-                    getString(R.string.confirm_delete_message)
-                ) {
-                    controller.deleteDebt(item.debt.id) {
-                        Toast.makeText(this@DebtListActivity, R.string.debt_deleted, Toast.LENGTH_SHORT).show()
-                    }
+        // Close swiped card on scroll or touch outside
+        binding.recyclerDebts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    adapter.closeOpenedSwipe()
                 }
-                // Refresh list item to reset visual swipe state
-                adapter.notifyItemChanged(position)
             }
+        })
+        binding.recyclerDebts.setOnTouchListener { _, _ ->
+            adapter.closeOpenedSwipe()
+            false
         }
-        ItemTouchHelper(swipeHandler).attachToRecyclerView(binding.recyclerDebts)
 
         // Observe data
         controller.activeDebts.observe(this) { list ->
@@ -122,6 +114,7 @@ class DebtListActivity : AppCompatActivity() {
         // Tab selection listener
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                adapter.closeOpenedSwipe()
                 updateUI()
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -143,43 +136,107 @@ class DebtListActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDeleteConfirmation(item: DebtWithNextDue) {
+        ConfirmDialog.show(
+            this,
+            getString(R.string.confirm_delete_title),
+            getString(R.string.confirm_delete_message)
+        ) {
+            controller.deleteDebt(item.debt.id) {
+                Toast.makeText(this@DebtListActivity, R.string.debt_deleted, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun finish() {
         super.finish()
         overrideSlideTransition(false)
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            val opened = adapter.openedSwipeListener
+            if (opened != null && opened.isOpened()) {
+                val view = opened.itemView
+                val rect = Rect()
+                view.getGlobalVisibleRect(rect)
+                if (!rect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    adapter.closeOpenedSwipe()
+                    return true // Consume to block action outside
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     private class DebtListAdapter(
         private val onItemClick: (DebtWithNextDue) -> Unit,
-        private val onItemLongClick: (DebtWithNextDue) -> Unit
+        private val onItemLongClick: (DebtWithNextDue) -> Unit,
+        private val onDeleteClick: (DebtWithNextDue) -> Unit,
+        private val isSwipeEnabled: () -> Boolean
     ) : RecyclerView.Adapter<DebtListAdapter.ViewHolder>() {
 
         private var list: List<DebtWithNextDue> = emptyList()
+        var openedSwipeListener: SwipeRevealTouchListener? = null
 
         fun submitList(newList: List<DebtWithNextDue>) {
             list = newList
             notifyDataSetChanged()
         }
 
+        fun closeOpenedSwipe() {
+            openedSwipeListener?.animateSwipe(0f)
+            openedSwipeListener = null
+        }
+
         fun getItemAt(position: Int): DebtWithNextDue = list[position]
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val binding = ItemDebtCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ViewHolder(binding, onItemClick, onItemLongClick)
+            return ViewHolder(binding, onItemClick, onItemLongClick, onDeleteClick)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(list[position])
+            holder.bind(list[position], isSwipeEnabled())
         }
 
         override fun getItemCount(): Int = list.size
 
-        class ViewHolder(
+        inner class ViewHolder(
             private val binding: ItemDebtCardBinding,
             private val onItemClick: (DebtWithNextDue) -> Unit,
-            private val onItemLongClick: (DebtWithNextDue) -> Unit
+            private val onItemLongClick: (DebtWithNextDue) -> Unit,
+            private val onDeleteClick: (DebtWithNextDue) -> Unit
         ) : RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(item: DebtWithNextDue) {
+            private val swipeTouchListener = SwipeRevealTouchListener(
+                binding.cardForeground,
+                onSwipeStateChanged = { listener ->
+                    val otherOpened = this@DebtListAdapter.openedSwipeListener != null &&
+                            this@DebtListAdapter.openedSwipeListener != listener &&
+                            this@DebtListAdapter.openedSwipeListener!!.isOpened()
+                    if (otherOpened) {
+                        this@DebtListAdapter.openedSwipeListener?.animateSwipe(0f)
+                        this@DebtListAdapter.openedSwipeListener = null
+                    } else {
+                        this@DebtListAdapter.openedSwipeListener = listener
+                    }
+                    otherOpened
+                }
+            )
+
+            init {
+                binding.cardForeground.setOnTouchListener(swipeTouchListener)
+            }
+
+            fun bind(item: DebtWithNextDue, isSwipeEnabled: Boolean) {
+                swipeTouchListener.reset()
+                if (isSwipeEnabled) {
+                    binding.cardForeground.setOnTouchListener(swipeTouchListener)
+                } else {
+                    binding.cardForeground.setOnTouchListener(null)
+                }
+
                 val context = itemView.context
                 val debt = item.debt
 
@@ -215,13 +272,24 @@ class DebtListActivity : AppCompatActivity() {
                     binding.textStatusLabel.setTextColor(context.getColor(R.color.dt_success))
                 }
 
-                itemView.setOnClickListener { onItemClick(item) }
-                itemView.setOnLongClickListener {
-                    onItemLongClick(item)
-                    true
+                binding.cardForeground.setOnClickListener {
+                    if (swipeTouchListener.isOpened()) {
+                        swipeTouchListener.animateSwipe(0f)
+                    } else {
+                        onItemClick(item)
+                    }
                 }
-                binding.btnMore.setOnClickListener {
-                    onItemLongClick(item)
+                binding.cardForeground.setOnLongClickListener {
+                    if (!swipeTouchListener.isOpened()) {
+                        onItemLongClick(item)
+                        true
+                    } else {
+                        false
+                    }
+                }
+                binding.btnDeleteSwipe.setOnClickListener {
+                    swipeTouchListener.animateSwipe(0f)
+                    onDeleteClick(item)
                 }
             }
         }

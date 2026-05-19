@@ -8,6 +8,7 @@
     <string name="upcoming_debts">상환 예정</string>
     <string name="add_debt">부채 추가</string>
     <string name="edit_debt">부채 편집</string>
+    <string name="edit_short">편집</string>
     <string name="create_debt">새 부채 등록</string>
     <string name="debt_detail">부채 상세 정보</string>
     <string name="current_debts">상환 중</string>

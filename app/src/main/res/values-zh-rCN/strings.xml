@@ -8,6 +8,7 @@
     <string name="upcoming_debts">即将到期</string>
     <string name="add_debt">添加债务</string>
     <string name="edit_debt">编辑债务</string>
+    <string name="edit_short">编辑</string>
     <string name="create_debt">创建新债务</string>
     <string name="debt_detail">债务详情</string>
     <string name="current_debts">未结清</string>
