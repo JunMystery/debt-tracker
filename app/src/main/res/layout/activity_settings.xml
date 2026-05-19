@@ -29,17 +29,46 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- General settings header -->
-            <TextView
+            <!-- General settings header row -->
+            <LinearLayout
+                android:id="@+id/headerGeneral"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_general"
-                android:textColor="@color/dt_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:letterSpacing="0.08"
-                android:layout_marginBottom="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_general"
+                    android:textColor="@color/dt_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.08" />
+
+                <ImageView
+                    android:id="@+id/ivChevronGeneral"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:tint="@color/dt_primary"
+                    android:contentDescription="@string/settings_general" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerGeneral"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
             <!-- Language preference card -->
             <com.google.android.material.card.MaterialCardView
@@ -135,17 +164,95 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Notifications settings header -->
-            <TextView
+            <!-- Date Format Setting Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_notifications"
-                android:textColor="@color/dt_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:letterSpacing="0.08"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/dt_outline"
+                app:cardBackgroundColor="@color/dt_surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_date_format"
+                        android:textColor="@color/dt_on_surface"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.DebtTracker.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteDateFormat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:textColor="@color/dt_on_surface"
+                            android:textSize="14sp"
+                            android:saveEnabled="false"
+                            android:popupBackground="@color/dt_surface"
+                            tools:ignore="LabelFor" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Notifications settings header row -->
+            <LinearLayout
+                android:id="@+id/headerNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_notifications"
+                    android:textColor="@color/dt_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.08" />
+
+                <ImageView
+                    android:id="@+id/ivChevronNotifications"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:tint="@color/dt_primary"
+                    android:contentDescription="@string/settings_notifications" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
             <!-- Notifications card -->
             <com.google.android.material.card.MaterialCardView
@@ -335,17 +442,48 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Backup / Auto save header -->
-            <TextView
+            </LinearLayout>
+
+            <!-- Backup / Auto save header row -->
+            <LinearLayout
+                android:id="@+id/headerBackup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_backup"
-                android:textColor="@color/dt_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:letterSpacing="0.08"
-                android:layout_marginBottom="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_backup"
+                    android:textColor="@color/dt_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.08" />
+
+                <ImageView
+                    android:id="@+id/ivChevronBackup"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:tint="@color/dt_primary"
+                    android:contentDescription="@string/settings_backup" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerBackup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
             <!-- Backup card -->
             <com.google.android.material.card.MaterialCardView
@@ -406,17 +544,48 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Import / Restore header -->
-            <TextView
+            </LinearLayout>
+
+            <!-- Import / Restore header row -->
+            <LinearLayout
+                android:id="@+id/headerImport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_import"
-                android:textColor="@color/dt_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:letterSpacing="0.08"
-                android:layout_marginBottom="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_import"
+                    android:textColor="@color/dt_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.08" />
+
+                <ImageView
+                    android:id="@+id/ivChevronImport"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:tint="@color/dt_primary"
+                    android:contentDescription="@string/settings_import" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerImport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
             <!-- Import card -->
             <com.google.android.material.card.MaterialCardView
@@ -464,6 +633,8 @@
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

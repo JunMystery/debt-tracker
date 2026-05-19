@@ -80,6 +80,7 @@
     <string name="settings_general">常规</string>
     <string name="settings_language">语言</string>
     <string name="settings_currency">首选货币</string>
+    <string name="settings_date_format">日期格式</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 
@@ -109,4 +110,17 @@
     <string name="import_confirm_title">覆盖数据</string>
     <string name="import_confirm_message">您确定要导入此文件吗？应用程序中所有当前的债务和付款记录都将被永久替换。</string>
     <string name="import_confirm_button">覆盖</string>
+
+    <!-- Detail Screen Labels & Statuses -->
+    <string name="months_format">%1$d 个月</string>
+    <string name="next_due_label">下期还款日</string>
+    <string name="remaining_months_label">剩余月数</string>
+    <string name="total_paid_label">已还金额</string>
+    <string name="debt_principal_label">本金</string>
+    <string name="loan_type_label">贷款类型</string>
+    <string name="credit_limit_label">信用额度</string>
+    <string name="status_overdue">逾期</string>
+    <string name="status_upcoming">即将来临</string>
+    <string name="status_no_due">无期限</string>
+    <string name="status_expired">已过期</string>
 </resources>

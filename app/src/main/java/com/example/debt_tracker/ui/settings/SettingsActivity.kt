@@ -55,9 +55,11 @@ class SettingsActivity : AppCompatActivity() {
         // Set up options
         setupLanguageSection()
         setupCurrencySection()
+        setupDateFormatSection()
         setupNotificationSection()
         setupBackupSection()
         setupImportSection()
+        setupCollapsibleSections()
     }
 
     private fun setupLanguageSection() {
@@ -138,6 +140,35 @@ class SettingsActivity : AppCompatActivity() {
         binding.autoCompleteCurrency.setOnItemClickListener { _, _, position, _ ->
             val selectedOption = currencies[position]
             com.example.debt_tracker.util.CurrencyUtils.setPreferredCurrency(this, selectedOption.code)
+        }
+    }
+
+    private class DateFormatOption(
+        val displayName: String,
+        val pattern: String
+    ) {
+        override fun toString(): String = displayName
+    }
+
+    private fun setupDateFormatSection() {
+        val formats = listOf(
+            DateFormatOption("DD/MM/YYYY (e.g. 19/05/2026)", "dd/MM/yyyy"),
+            DateFormatOption("MM/DD/YYYY (e.g. 05/19/2026)", "MM/dd/yyyy"),
+            DateFormatOption("YYYY-MM-DD (e.g. 2026-05-19)", "yyyy-MM-dd")
+        )
+
+        val adapter = NoFilterAdapter(this, R.layout.item_dropdown, formats)
+        binding.autoCompleteDateFormat.setAdapter(adapter)
+
+        val currentPreferred = com.example.debt_tracker.util.DateUtils.getPreferredDateFormat(this)
+        val activeIndex = formats.indexOfFirst { it.pattern == currentPreferred }.coerceAtLeast(0)
+
+        binding.autoCompleteDateFormat.setText(formats[activeIndex].displayName, false)
+
+        binding.autoCompleteDateFormat.setOnItemClickListener { _, _, position, _ ->
+            val selectedOption = formats[position]
+            com.example.debt_tracker.util.DateUtils.setPreferredDateFormat(this, selectedOption.pattern)
+            android.widget.Toast.makeText(this, getString(R.string.debt_saved), android.widget.Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -399,5 +430,29 @@ class SettingsActivity : AppCompatActivity() {
     override fun finish() {
         super.finish()
         overrideSlideTransition(false)
+    }
+
+    private fun setupCollapsibleSections() {
+        setupCollapsibleSection(binding.headerGeneral, binding.containerGeneral, binding.ivChevronGeneral)
+        setupCollapsibleSection(binding.headerNotifications, binding.containerNotifications, binding.ivChevronNotifications)
+        setupCollapsibleSection(binding.headerBackup, binding.containerBackup, binding.ivChevronBackup)
+        setupCollapsibleSection(binding.headerImport, binding.containerImport, binding.ivChevronImport)
+    }
+
+    private fun setupCollapsibleSection(
+        headerView: View,
+        containerView: View,
+        chevronView: android.widget.ImageView
+    ) {
+        chevronView.rotation = 0f
+        headerView.setOnClickListener {
+            if (containerView.visibility == View.VISIBLE) {
+                containerView.visibility = View.GONE
+                chevronView.animate().rotation(0f).setDuration(200).start()
+            } else {
+                containerView.visibility = View.VISIBLE
+                chevronView.animate().rotation(180f).setDuration(200).start()
+            }
+        }
     }
 }

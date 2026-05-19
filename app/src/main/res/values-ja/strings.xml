@@ -80,6 +80,7 @@
     <string name="settings_general">一般</string>
     <string name="settings_language">言語</string>
     <string name="settings_currency">優先通貨</string>
+    <string name="settings_date_format">日付形式</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 
@@ -109,4 +110,17 @@
     <string name="import_confirm_title">データの上書き</string>
     <string name="import_confirm_message">このファイルをインポートしてもよろしいですか？アプリ内のすべての現在の負債と支払記録が完全に削除され上書きされます。</string>
     <string name="import_confirm_button">上書き</string>
+
+    <!-- Detail Screen Labels & Statuses -->
+    <string name="months_format">%1$dヶ月</string>
+    <string name="next_due_label">次回支払日</string>
+    <string name="remaining_months_label">残り月数</string>
+    <string name="total_paid_label">返済済み合計</string>
+    <string name="debt_principal_label">借入元金</string>
+    <string name="loan_type_label">ローンタイプ</string>
+    <string name="credit_limit_label">与信限度額</string>
+    <string name="status_overdue">延滞中</string>
+    <string name="status_upcoming">期日近し</string>
+    <string name="status_no_due">期日なし</string>
+    <string name="status_expired">期限切れ</string>
 </resources>

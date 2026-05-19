@@ -80,7 +80,8 @@
     <string name="settings_general">一般設定</string>
     <string name="settings_language">語言</string>
     <string name="settings_currency">首選貨幣</string>
-    <string name="language_english">英文 (美式)</string>
+    <string name="settings_date_format">日期格式</string>
+    <string name="language_english">English (US)</string>
     <string name="language_vietnamese">越南文</string>
     <string name="settings_notifications">提醒設定</string>
     <string name="enable_reminders">啟用付款提醒</string>
@@ -108,4 +109,17 @@
     <string name="import_confirm_title">覆蓋資料</string>
     <string name="import_confirm_message">您確定要匯入此檔案嗎？應用程式中所有目前的債務和付款記錄都將被永久替換。</string>
     <string name="import_confirm_button">覆蓋</string>
+
+    <!-- Detail Screen Labels & Statuses -->
+    <string name="months_format">%1$d 個月</string>
+    <string name="next_due_label">下期還款日</string>
+    <string name="remaining_months_label">剩餘月數</string>
+    <string name="total_paid_label">已還金額</string>
+    <string name="debt_principal_label">本金</string>
+    <string name="loan_type_label">貸款類型</string>
+    <string name="credit_limit_label">信用額度</string>
+    <string name="status_overdue">逾期</string>
+    <string name="status_upcoming">即將來臨</string>
+    <string name="status_no_due">無期限</string>
+    <string name="status_expired">已過期</string>
 </resources>

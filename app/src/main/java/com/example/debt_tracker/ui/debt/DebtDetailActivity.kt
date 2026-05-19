@@ -130,14 +130,14 @@ class DebtDetailActivity : AppCompatActivity() {
         // Next due date calculations
         val nextDue = DateUtils.computeNextDueDate(debt)
         if (nextDue != null) {
-            binding.textNextDue.text = DateUtils.formatDay(nextDue)
+            binding.textNextDue.text = DateUtils.formatDay(this, nextDue)
         } else {
-            binding.textNextDue.text = "Không có kỳ hạn"
+            binding.textNextDue.text = getString(R.string.status_no_due)
         }
 
         // Remaining months
         val remaining = DateUtils.remainingMonths(debt.endYearMonth)
-        binding.textRemainingMonths.text = getString(R.string.remaining_months, remaining).replace("Số tháng còn lại: ", "")
+        binding.textRemainingMonths.text = getString(R.string.months_format, remaining)
 
         // Total paid
         binding.textTotalPaid.text = CurrencyUtils.getFormattedAmount(this, debt.totalPaid, debt.currencyCode)
@@ -219,7 +219,7 @@ class DebtDetailActivity : AppCompatActivity() {
         val nextPayment = LoanCalculator.calculateNextPayment(debt)
         bsBinding.editAmount.setText(String.format(java.util.Locale.US, "%.0f", nextPayment))
         var selectedDate = LocalDate.now()
-        bsBinding.textSelectedDate.text = DateUtils.formatDay(selectedDate)
+        bsBinding.textSelectedDate.text = DateUtils.formatDay(this, selectedDate)
 
         // Date Picker Action
         bsBinding.cardDatePicker.setOnClickListener {
@@ -231,7 +231,7 @@ class DebtDetailActivity : AppCompatActivity() {
                 selectedDate.year
             ) { d, m, y ->
                 selectedDate = LocalDate.of(y, m, d)
-                bsBinding.textSelectedDate.text = DateUtils.formatDay(selectedDate)
+                bsBinding.textSelectedDate.text = DateUtils.formatDay(this, selectedDate)
             }
         }
 
@@ -263,6 +263,28 @@ class DebtDetailActivity : AppCompatActivity() {
         overrideSlideTransition(false)
     }
 
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_debt_detail, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit -> {
+                val debt = currentDebt
+                if (debt != null) {
+                    val intent = android.content.Intent(this, CreateEditDebtActivity::class.java).apply {
+                        putExtra("DEBT_ID", debt.id)
+                    }
+                    startActivity(intent)
+                    overrideSlideTransition(true)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private class PaymentAdapter : RecyclerView.Adapter<PaymentAdapter.ViewHolder>() {
 
         private var list: List<Payment> = emptyList()
@@ -287,7 +309,7 @@ class DebtDetailActivity : AppCompatActivity() {
 
         class ViewHolder(private val binding: ItemPaymentBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(payment: Payment, currency: String) {
-                binding.textPaymentDate.text = DateUtils.formatDay(payment.paymentDate)
+                binding.textPaymentDate.text = DateUtils.formatDay(itemView.context, payment.paymentDate)
                 binding.textPaymentAmount.text = "+${CurrencyUtils.getFormattedAmount(itemView.context, payment.amount, currency)}"
             }
         }

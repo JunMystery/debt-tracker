@@ -86,12 +86,22 @@ class DebtReminderReceiver : BroadcastReceiver() {
 
             // Check if current day of month is in active reminder window for this debt
             if (currentDay in startReminderDay..targetDueDay) {
-                // Verify if a payment has already been logged for this debt in the current month
+                // Verify if a payment has already been logged or paid in advance for the current month
                 val paymentsThisMonth = allPayments.filter {
                     it.debtId == debt.id && it.paymentDate >= startOfMonthMs && it.paymentDate < startOfNextMonthMs
                 }
 
-                if (paymentsThisMonth.isEmpty()) {
+                val currentMonth = java.time.YearMonth.now()
+                val startMonth = try { java.time.YearMonth.parse(debt.startYearMonth) } catch(e: Exception) { currentMonth }
+                val expectedMonths = if (currentMonth < startMonth) {
+                    0
+                } else {
+                    ((currentMonth.year - startMonth.year) * 12) + (currentMonth.monthValue - startMonth.monthValue) + 1
+                }
+                val expectedTotalPaid = expectedMonths * debt.monthlyAmount
+                val isPaidForCurrentMonth = debt.totalPaid >= expectedTotalPaid || paymentsThisMonth.isNotEmpty()
+
+                if (!isPaidForCurrentMonth) {
                     // Send notification!
                     val title = context.getString(R.string.notification_title)
                     val formattedAmount = CurrencyUtils.format(debt.monthlyAmount, debt.currencyCode)
@@ -105,7 +115,7 @@ class DebtReminderReceiver : BroadcastReceiver() {
                     Log.d(TAG, "Firing notification for debt ${debt.id}: $message")
                     NotificationHelper.showNotification(context, debt.id, title, message)
                 } else {
-                    Log.d(TAG, "Debt ${debt.id} already paid this month. Skipping notification.")
+                    Log.d(TAG, "Debt ${debt.id} already paid or prepaid this month. Skipping notification.")
                 }
             }
         }

@@ -80,6 +80,7 @@
     <string name="settings_general">일반</string>
     <string name="settings_language">언어</string>
     <string name="settings_currency">선호 통화</string>
+    <string name="settings_date_format">날짜 형식</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 
@@ -109,4 +110,17 @@
     <string name="import_confirm_title">데이터 덮어쓰기</string>
     <string name="import_confirm_message">이 파일을 가져오시겠습니까? 현재 애플리케이션의 모든 부채 및 결제 기록이 영구적으로 삭제되고 대체됩니다.</string>
     <string name="import_confirm_button">덮어쓰기</string>
+
+    <!-- Detail Screen Labels & Statuses -->
+    <string name="months_format">%1$d개월</string>
+    <string name="next_due_label">다음 납부일</string>
+    <string name="remaining_months_label">남은 개월 수</string>
+    <string name="total_paid_label">누적 납부액</string>
+    <string name="debt_principal_label">원금</string>
+    <string name="loan_type_label">대출 유형</string>
+    <string name="credit_limit_label">한도금액</string>
+    <string name="status_overdue">연체됨</string>
+    <string name="status_upcoming">곧 다가옴</string>
+    <string name="status_no_due">기한 없음</string>
+    <string name="status_expired">만료됨</string>
 </resources>

@@ -80,6 +80,7 @@
     <string name="settings_general">General</string>
     <string name="settings_language">Language</string>
     <string name="settings_currency">Preferred Currency</string>
+    <string name="settings_date_format">Date Format</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 
@@ -109,4 +110,17 @@
     <string name="import_confirm_title">Overwriting Data</string>
     <string name="import_confirm_message">Are you sure you want to import this file? All current debts and payments in the application will be permanently replaced.</string>
     <string name="import_confirm_button">Overwrite</string>
+
+    <!-- Detail Screen Labels & Statuses -->
+    <string name="months_format">%1$d months</string>
+    <string name="next_due_label">Next Due Date</string>
+    <string name="remaining_months_label">Remaining Months</string>
+    <string name="total_paid_label">Total Paid</string>
+    <string name="debt_principal_label">Principal</string>
+    <string name="loan_type_label">Loan Type</string>
+    <string name="credit_limit_label">Credit Limit</string>
+    <string name="status_overdue">Overdue</string>
+    <string name="status_upcoming">Upcoming</string>
+    <string name="status_no_due">No Due Date</string>
+    <string name="status_expired">Expired</string>
 </resources>

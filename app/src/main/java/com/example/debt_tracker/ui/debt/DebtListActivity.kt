@@ -190,22 +190,22 @@ class DebtListActivity : AppCompatActivity() {
                 // Compute status & due date text
                 val nextDue = item.nextDueDate
                 if (nextDue != null) {
-                    binding.textDueDate.text = context.getString(R.string.debt_card_due, DateUtils.formatDay(nextDue))
+                    binding.textDueDate.text = context.getString(R.string.debt_card_due, DateUtils.formatDay(context, nextDue))
                     
                     val today = LocalDate.now()
                     if (nextDue.isBefore(today)) {
                         binding.viewStatusIndicator.setBackgroundColor(context.getColor(R.color.dt_error))
-                        binding.textStatusLabel.text = "Trễ hạn"
+                        binding.textStatusLabel.text = context.getString(R.string.status_overdue)
                         binding.textStatusLabel.setTextColor(context.getColor(R.color.dt_error))
                     } else {
                         binding.viewStatusIndicator.setBackgroundColor(context.getColor(R.color.dt_primary))
-                        binding.textStatusLabel.text = "Sắp đến"
+                        binding.textStatusLabel.text = context.getString(R.string.status_upcoming)
                         binding.textStatusLabel.setTextColor(context.getColor(R.color.dt_primary))
                     }
                 } else {
-                    binding.textDueDate.text = "Không có kỳ hạn"
+                    binding.textDueDate.text = context.getString(R.string.status_no_due)
                     binding.viewStatusIndicator.setBackgroundColor(context.getColor(R.color.dt_secondary))
-                    binding.textStatusLabel.text = "Hết hạn"
+                    binding.textStatusLabel.text = context.getString(R.string.status_expired)
                     binding.textStatusLabel.setTextColor(context.getColor(R.color.dt_secondary))
                 }
 

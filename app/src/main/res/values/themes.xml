@@ -45,11 +45,20 @@
         <item name="colorOnSurfaceVariant">@color/dt_secondary</item>
         <item name="android:textColorPrimary">@color/dt_on_surface</item>
         <item name="android:textColorSecondary">@color/dt_secondary</item>
+        <item name="android:background">@color/dt_surface</item>
         <item name="colorPrimary">@color/dt_primary</item>
-        <item name="materialAlertDialogViewStyle">@style/Widget_DebtTracker_MaterialAlertDialog</item>
+        <item name="alertDialogStyle">@style/Widget_DebtTracker_MaterialAlertDialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget_DebtTracker_DialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget_DebtTracker_DialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget_DebtTracker_DialogButton</item>
     </style>
 
-    <style name="Widget_DebtTracker_MaterialAlertDialog" parent="Widget.Material3.MaterialAlertDialog">
+    <style name="Widget_DebtTracker_DialogButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/dt_primary</item>
+        <item name="rippleColor">@color/dt_primary_container</item>
+    </style>
+
+    <style name="Widget_DebtTracker_MaterialAlertDialog" parent="MaterialAlertDialog.Material3">
         <item name="backgroundTint">@color/dt_surface</item>
         <item name="shapeAppearance">@style/ShapeAppearance_DebtTracker_Dialog</item>
     </style>

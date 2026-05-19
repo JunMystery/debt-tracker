@@ -11,11 +11,21 @@ import kotlin.math.min
 object DateUtils {
     fun parseYearMonth(value: String): YearMonth = YearMonth.parse(value)
 
-    fun formatDay(date: LocalDate): String {
+    fun getPreferredDateFormat(context: android.content.Context): String {
+        val prefs = context.getSharedPreferences("debt_tracker_settings", android.content.Context.MODE_PRIVATE)
+        return prefs.getString("pref_date_format", "dd/MM/yyyy") ?: "dd/MM/yyyy"
+    }
+
+    fun setPreferredDateFormat(context: android.content.Context, format: String) {
+        val prefs = context.getSharedPreferences("debt_tracker_settings", android.content.Context.MODE_PRIVATE)
+        prefs.edit().putString("pref_date_format", format).apply()
+    }
+
+    fun formatDay(context: android.content.Context, date: LocalDate): String {
         val locale = java.util.Locale.getDefault()
         return try {
-            val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "ddMMyyyy")
-            val formatter = DateTimeFormatter.ofPattern(pattern, locale)
+            val format = getPreferredDateFormat(context)
+            val formatter = DateTimeFormatter.ofPattern(format, locale)
             date.format(formatter)
         } catch (e: Exception) {
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)
@@ -23,9 +33,9 @@ object DateUtils {
         }
     }
 
-    fun formatDay(timestampMillis: Long): String {
+    fun formatDay(context: android.content.Context, timestampMillis: Long): String {
         val date = Instant.ofEpochMilli(timestampMillis).atZone(ZoneId.systemDefault()).toLocalDate()
-        return formatDay(date)
+        return formatDay(context, date)
     }
 
     fun formatMonthYear(yearMonth: YearMonth): String {
@@ -43,42 +53,60 @@ object DateUtils {
     fun nowYearMonth(): YearMonth = YearMonth.now()
 
     fun monthsBetweenInclusive(startYearMonth: String, endYearMonth: String): Int {
-        val start = parseYearMonth(startYearMonth)
-        val end = parseYearMonth(endYearMonth)
-        return (end.year - start.year) * 12 + (end.monthValue - start.monthValue) + 1
+        return try {
+            val start = parseYearMonth(startYearMonth)
+            val end = parseYearMonth(endYearMonth)
+            (end.year - start.year) * 12 + (end.monthValue - start.monthValue) + 1
+        } catch (e: Exception) {
+            1
+        }
     }
 
     fun remainingMonths(endYearMonth: String, from: YearMonth = nowYearMonth()): Int {
-        val end = parseYearMonth(endYearMonth)
-        val value = (end.year - from.year) * 12 + (end.monthValue - from.monthValue) + 1
-        return value.coerceAtLeast(0)
+        return try {
+            val end = parseYearMonth(endYearMonth)
+            val value = (end.year - from.year) * 12 + (end.monthValue - from.monthValue) + 1
+            value.coerceAtLeast(0)
+        } catch (e: Exception) {
+            0
+        }
     }
 
     fun isActiveForMonth(debt: Debt, month: YearMonth): Boolean {
-        val start = parseYearMonth(debt.startYearMonth)
-        val end = parseYearMonth(debt.endYearMonth)
-        return month >= start && month <= end
+        return try {
+            val start = parseYearMonth(debt.startYearMonth)
+            val end = parseYearMonth(debt.endYearMonth)
+            month >= start && month <= end
+        } catch (e: Exception) {
+            false
+        }
     }
 
     fun computeNextDueDate(
         debt: Debt,
         fromDate: LocalDate = LocalDate.now()
     ): LocalDate? {
-        val startMonth = parseYearMonth(debt.startYearMonth)
-        val endMonth = parseYearMonth(debt.endYearMonth)
-        var cursor = YearMonth.of(fromDate.year, fromDate.month)
-        if (cursor < startMonth) {
-            cursor = startMonth
-        }
+        return try {
+            val startMonth = parseYearMonth(debt.startYearMonth)
+            val endMonth = parseYearMonth(debt.endYearMonth)
+            
+            // Calculate covered months from totalPaid
+            val monthsPaid = if (debt.monthlyAmount > 0) (debt.totalPaid / debt.monthlyAmount).toInt() else 0
+            val firstUnpaidMonth = startMonth.plusMonths(monthsPaid.toLong())
+            
+            var cursor = firstUnpaidMonth
+            if (cursor < startMonth) {
+                cursor = startMonth
+            }
 
-        while (cursor <= endMonth) {
-            val day = min(debt.dueDayOfMonth, cursor.lengthOfMonth())
-            val candidate = LocalDate.of(cursor.year, cursor.month, day)
-            if (!candidate.isBefore(fromDate)) {
+            while (cursor <= endMonth) {
+                val day = min(debt.dueDayOfMonth, cursor.lengthOfMonth())
+                val candidate = LocalDate.of(cursor.year, cursor.month, day)
                 return candidate
             }
-            cursor = cursor.plusMonths(1)
+            null
+        } catch (e: Exception) {
+            null
         }
-        return null
     }
 }

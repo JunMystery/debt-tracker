@@ -48,7 +48,6 @@ class DashboardController(
     private fun buildDashboardData(debts: List<Debt>, payments: List<Payment>): DashboardData {
         val currentMonth = DateUtils.nowYearMonth()
         val activeDebts = debts.filter { !it.isCompleted && DateUtils.isActiveForMonth(it, currentMonth) }
-        val totalDue = activeDebts.sumOf { it.monthlyAmount }
 
         val paidDebtIdsThisMonth = payments
             .filter { payment ->
@@ -62,7 +61,21 @@ class DashboardController(
             .map { it.debtId }
             .toSet()
 
-        val paidCount = activeDebts.count { paidDebtIdsThisMonth.contains(it.id) }
+        val unpaidDebts = activeDebts.filter { debt ->
+            val startMonth = try { DateUtils.parseYearMonth(debt.startYearMonth) } catch(e: Exception) { currentMonth }
+            val expectedMonths = if (currentMonth < startMonth) {
+                0
+            } else {
+                ((currentMonth.year - startMonth.year) * 12) + (currentMonth.monthValue - startMonth.monthValue) + 1
+            }
+            val expectedTotalPaid = expectedMonths * debt.monthlyAmount
+            val isPaidForCurrentMonth = debt.totalPaid >= expectedTotalPaid || paidDebtIdsThisMonth.contains(debt.id)
+            !isPaidForCurrentMonth
+        }
+
+        val totalDue = unpaidDebts.sumOf { it.monthlyAmount }
+        val paidCount = activeDebts.size - unpaidDebts.size
+
         val upcoming = debts
             .filter { !it.isCompleted }
             .map { DebtWithNextDue(it, DateUtils.computeNextDueDate(it)) }

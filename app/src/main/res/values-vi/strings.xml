@@ -80,6 +80,7 @@
     <string name="settings_general">Chung</string>
     <string name="settings_language">Ngôn ngữ</string>
     <string name="settings_currency">Tiền tệ hiển thị</string>
+    <string name="settings_date_format">Định dạng ngày tháng</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 
@@ -109,4 +110,17 @@
     <string name="import_confirm_title">Ghi đè dữ liệu</string>
     <string name="import_confirm_message">Bạn có chắc chắn muốn nhập tệp này không? Tất cả các khoản nợ và lịch sử thanh toán hiện tại sẽ bị xóa hoàn toàn.</string>
     <string name="import_confirm_button">Ghi đè</string>
+
+    <!-- Detail Screen Labels & Statuses -->
+    <string name="months_format">%1$d tháng</string>
+    <string name="next_due_label">Kỳ hạn kế tiếp</string>
+    <string name="remaining_months_label">Số tháng còn lại</string>
+    <string name="total_paid_label">Đã thanh toán</string>
+    <string name="debt_principal_label">Nợ gốc</string>
+    <string name="loan_type_label">Loại khoản vay</string>
+    <string name="credit_limit_label">Hạn mức tín dụng</string>
+    <string name="status_overdue">Trễ hạn</string>
+    <string name="status_upcoming">Sắp đến</string>
+    <string name="status_no_due">Không có kỳ hạn</string>
+    <string name="status_expired">Hết hạn</string>
 </resources>

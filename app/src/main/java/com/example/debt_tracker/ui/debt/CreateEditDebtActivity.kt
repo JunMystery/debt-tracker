@@ -31,6 +31,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
 
     private var rawAmount: Double = 0.0
     private var rawCreditLimit: Double = 0.0
+    private var rawPrincipal: Double = 0.0
 
     private fun setupCurrencyWatchers(currency: String) {
         binding.editAmount.addTextChangedListener(CurrencyTextWatcher(binding.editAmount, currency) { value ->
@@ -39,6 +40,9 @@ class CreateEditDebtActivity : AppCompatActivity() {
         })
         binding.editCreditLimit.addTextChangedListener(CurrencyTextWatcher(binding.editCreditLimit, currency) { value ->
             rawCreditLimit = value
+        })
+        binding.editPrincipal.addTextChangedListener(CurrencyTextWatcher(binding.editPrincipal, currency) { value ->
+            rawPrincipal = value
         })
     }
 
@@ -147,6 +151,8 @@ class CreateEditDebtActivity : AppCompatActivity() {
             if (debt == null) return@observe
             if (originalDebt == null) {
                 originalDebt = debt
+                binding.editCreditor.setText(debt.creditorName)
+                binding.editContract.setText(debt.contractNumber)
                 val activeCurrency = debt.currencyCode
                 setupCurrencyWatchers(activeCurrency)
 
@@ -161,16 +167,22 @@ class CreateEditDebtActivity : AppCompatActivity() {
                 binding.editAmount.setText(amountText)
 
                 if (debt.principal > 0) {
-                    binding.editPrincipal.setText(String.format(java.util.Locale.US, "%.0f", debt.principal))
+                    val rawPrincipalVal = debt.principal
+                    val principalText = if (isCentsCurrency) {
+                        String.format(java.util.Locale.US, "%.0f", rawPrincipalVal * 100)
+                    } else {
+                        String.format(java.util.Locale.US, "%.0f", rawPrincipalVal)
+                    }
+                    binding.editPrincipal.setText(principalText)
                 }
 
                 selectedDueDay = debt.dueDayOfMonth
 
-                val startYM = YearMonth.parse(debt.startYearMonth)
+                val startYM = try { YearMonth.parse(debt.startYearMonth) } catch (e: Exception) { YearMonth.now() }
                 selectedStartMonth = startYM.monthValue
                 selectedStartYear = startYM.year
 
-                val endYM = YearMonth.parse(debt.endYearMonth)
+                val endYM = try { YearMonth.parse(debt.endYearMonth) } catch (e: Exception) { YearMonth.now() }
                 selectedEndMonth = endYM.monthValue
                 selectedEndYear = endYM.year
 
@@ -216,7 +228,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
         }
 
         val amount = rawAmount
-        val principal = principalStr.toDoubleOrNull() ?: 0.0
+        val principal = rawPrincipal
 
         val startYM = YearMonth.of(selectedStartYear, selectedStartMonth)
         val endYM = YearMonth.of(selectedEndYear, selectedEndMonth)
@@ -300,7 +312,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
             val startYM = String.format(java.util.Locale.US, "%04d-%02d", selectedStartYear, selectedStartMonth)
             val endYM = String.format(java.util.Locale.US, "%04d-%02d", selectedEndYear, selectedEndMonth)
             val amount = rawAmount
-            val principal = principalStr.toDoubleOrNull() ?: 0.0
+            val principal = rawPrincipal
             val interestRate = interestRateStr.toDoubleOrNull() ?: 0.0
             val creditLimit = rawCreditLimit
             val minPaymentPercent = minPaymentPercentStr.toDoubleOrNull() ?: 0.0
@@ -345,7 +357,14 @@ class CreateEditDebtActivity : AppCompatActivity() {
                 String.format(java.util.Locale.US, "%04d-%02d", selectedEndYear, selectedEndMonth)
             )
             val calculatedPrincipal = amount * months
-            binding.editPrincipal.setText(String.format(java.util.Locale.US, "%.0f", calculatedPrincipal))
+            val activeCurrency = com.example.debt_tracker.util.CurrencyUtils.getPreferredCurrency(this)
+            val isCentsCurrency = activeCurrency.uppercase() in listOf("USD", "GBP", "CNY", "EUR", "TWD")
+            val principalText = if (isCentsCurrency) {
+                String.format(java.util.Locale.US, "%.0f", calculatedPrincipal * 100)
+            } else {
+                String.format(java.util.Locale.US, "%.0f", calculatedPrincipal)
+            }
+            binding.editPrincipal.setText(principalText)
         } else {
             binding.editPrincipal.setText("")
         }

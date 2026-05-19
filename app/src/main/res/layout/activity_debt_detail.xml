@@ -94,177 +94,245 @@
                             android:background="@color/dt_outline" />
 
                         <!-- Grid Info -->
-                        <GridLayout
+                        <!-- Info Rows -->
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:columnCount="2"
-                            android:rowCount="10"
-                            android:useDefaultMargins="true">
+                            android:orientation="vertical"
+                            android:padding="4dp">
 
-                            <TextView
-                                android:id="@+id/labelMonthlyAmount"
-                                android:layout_columnWeight="1"
-                                android:text="@string/monthly_amount"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp" />
+                            <!-- Row 1: Monthly Amount -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/labelMonthlyAmount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/monthly_amount"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/textMonthlyAmount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    tools:text="5.000.000 ₫" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/textMonthlyAmount"
-                                android:layout_columnWeight="1"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                tools:text="5.000.000 ₫" />
+                            <!-- Row 2: Next Due Date -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/next_due_label"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/textNextDue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    tools:text="15/06/2026" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="Kỳ hạn kế tiếp"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp" />
+                            <!-- Row 3: Remaining Months -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/remaining_months_label"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/textRemainingMonths"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    tools:text="12 tháng" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/textNextDue"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                tools:text="15/06/2026" />
+                            <!-- Row 4: Total Paid -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/total_paid_label"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/textTotalPaid"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_success"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    tools:text="15.000.000 ₫" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="Số tháng còn lại"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp" />
+                            <!-- Row 5: Principal -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/labelPrincipal"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/debt_principal_label"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/textPrincipal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    tools:text="100.000.000 ₫" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/textRemainingMonths"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                tools:text="12 tháng" />
+                            <!-- Row 6: Loan Type -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/labelLoanType"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/loan_type_label"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/textLoanType"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    tools:text="Cố định - Trả góp" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="Đã thanh toán"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp" />
+                            <!-- Row 7: Interest Rate -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/labelInterestRate"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/interest_rate"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/textInterestRate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    tools:text="5.5 %" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/textTotalPaid"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_success"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                tools:text="15.000.000 ₫" />
+                            <!-- Row 8: Credit Limit -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/labelCreditLimit"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/credit_limit"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/textCreditLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    tools:text="50.000.000 ₫" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/labelPrincipal"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="Nợ gốc"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/textPrincipal"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                android:visibility="gone"
-                                tools:text="100.000.000 ₫" />
-
-                            <!-- Loan Type Display -->
-                            <TextView
-                                android:id="@+id/labelLoanType"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="Loại khoản vay"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/textLoanType"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                android:visibility="gone"
-                                tools:text="Cố định - Trả góp" />
-
-                            <!-- Interest/Profit Rate Display -->
-                            <TextView
-                                android:id="@+id/labelInterestRate"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="@string/interest_rate"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/textInterestRate"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                android:visibility="gone"
-                                tools:text="5.5 %" />
-
-                            <!-- Credit Limit Display -->
-                            <TextView
-                                android:id="@+id/labelCreditLimit"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="@string/credit_limit"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/textCreditLimit"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                android:visibility="gone"
-                                tools:text="50.000.000 ₫" />
-
-                            <!-- Remaining Balance Display -->
-                            <TextView
-                                android:id="@+id/labelRemainingBalance"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:text="@string/remaining_balance"
-                                android:textColor="@color/dt_secondary"
-                                android:textSize="12sp"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/textRemainingBalance"
-                                android:layout_columnWeight="1"
-                                android:layout_marginTop="8dp"
-                                android:gravity="end"
-                                android:textColor="@color/dt_on_surface"
-                                android:textSize="14sp"
-                                android:visibility="gone"
-                                tools:text="35.000.000 ₫" />
-                        </GridLayout>
+                            <!-- Row 9: Remaining Balance -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/labelRemainingBalance"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginTop="8dp"
+                                    android:text="@string/remaining_balance"
+                                    android:textColor="@color/dt_secondary"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/textRemainingBalance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:gravity="end"
+                                    android:textColor="@color/dt_on_surface"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    tools:text="35.000.000 ₫" />
+                            </LinearLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
