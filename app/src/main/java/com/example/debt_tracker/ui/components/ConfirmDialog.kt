@@ -1,7 +1,7 @@
 package com.example.debt_tracker.ui.components
 
 import android.content.Context
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.example.debt_tracker.R
 
 object ConfirmDialog {
@@ -11,7 +11,7 @@ object ConfirmDialog {
         message: String,
         onConfirm: () -> Unit
     ) {
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(R.string.confirm_yes) { _, _ -> onConfirm() }
