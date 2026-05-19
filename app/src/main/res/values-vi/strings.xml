@@ -79,6 +79,7 @@
     <string name="settings_title">Cài đặt</string>
     <string name="settings_general">Chung</string>
     <string name="settings_language">Ngôn ngữ</string>
+    <string name="settings_currency">Tiền tệ hiển thị</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 

@@ -54,6 +54,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Set up options
         setupLanguageSection()
+        setupCurrencySection()
         setupNotificationSection()
         setupBackupSection()
         setupImportSection()
@@ -105,6 +106,38 @@ class SettingsActivity : AppCompatActivity() {
                 val localeList = LocaleListCompat.forLanguageTags(selectedOption.tag)
                 AppCompatDelegate.setApplicationLocales(localeList)
             }
+        }
+    }
+
+    private class CurrencyOption(
+        val displayName: String,
+        val code: String
+    ) {
+        override fun toString(): String = displayName
+    }
+
+    private fun setupCurrencySection() {
+        val currencies = listOf(
+            CurrencyOption("🇺🇸 USD - US Dollar", "USD"),
+            CurrencyOption("🇻🇳 VND - Vietnamese Dong", "VND"),
+            CurrencyOption("🇬🇧 GBP - British Pound", "GBP"),
+            CurrencyOption("🇨🇳 CNY - Chinese Yuan", "CNY"),
+            CurrencyOption("🇯🇵 JPY - Japanese Yen", "JPY"),
+            CurrencyOption("🇰🇷 KRW - Korean Won", "KRW"),
+            CurrencyOption("🇨🇳 TWD - New Taiwan Dollar", "TWD")
+        )
+
+        val adapter = NoFilterAdapter(this, R.layout.item_dropdown, currencies)
+        binding.autoCompleteCurrency.setAdapter(adapter)
+
+        val currentPreferred = com.example.debt_tracker.util.CurrencyUtils.getPreferredCurrency(this)
+        val activeIndex = currencies.indexOfFirst { it.code.uppercase() == currentPreferred.uppercase() }.coerceAtLeast(0)
+
+        binding.autoCompleteCurrency.setText(currencies[activeIndex].displayName, false)
+
+        binding.autoCompleteCurrency.setOnItemClickListener { _, _, position, _ ->
+            val selectedOption = currencies[position]
+            com.example.debt_tracker.util.CurrencyUtils.setPreferredCurrency(this, selectedOption.code)
         }
     }
 

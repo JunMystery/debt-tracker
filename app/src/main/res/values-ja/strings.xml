@@ -79,6 +79,7 @@
     <string name="settings_title">設定</string>
     <string name="settings_general">一般</string>
     <string name="settings_language">言語</string>
+    <string name="settings_currency">優先通貨</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 

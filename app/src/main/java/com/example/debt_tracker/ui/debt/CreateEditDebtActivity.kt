@@ -77,7 +77,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
         } else {
             binding.toolbar.title = getString(R.string.create_debt)
             updateDatePickersUI()
-            setupCurrencyWatchers(com.example.debt_tracker.util.CurrencyUtils.getCurrencyCode())
+            setupCurrencyWatchers(com.example.debt_tracker.util.CurrencyUtils.getPreferredCurrency(this))
         }
 
         // Click pickers
@@ -270,7 +270,7 @@ class CreateEditDebtActivity : AppCompatActivity() {
             creditLimit = creditLimit,
             remainingBalance = remainingBalance,
             minimumPaymentPercent = minPaymentPercent,
-            currencyCode = com.example.debt_tracker.util.CurrencyUtils.getCurrencyCode()
+            currencyCode = com.example.debt_tracker.util.CurrencyUtils.getPreferredCurrency(this)
         )
 
         if (isEditMode) {

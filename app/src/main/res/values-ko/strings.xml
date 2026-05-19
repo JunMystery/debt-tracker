@@ -79,6 +79,7 @@
     <string name="settings_title">설정</string>
     <string name="settings_general">일반</string>
     <string name="settings_language">언어</string>
+    <string name="settings_currency">선호 통화</string>
     <string name="language_english">English (US)</string>
     <string name="language_vietnamese">Tiếng Việt (VN)</string>
 

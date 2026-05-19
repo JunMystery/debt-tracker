@@ -94,7 +94,7 @@ class DebtReminderReceiver : BroadcastReceiver() {
                 if (paymentsThisMonth.isEmpty()) {
                     // Send notification!
                     val title = context.getString(R.string.notification_title)
-                    val formattedAmount = CurrencyUtils.format(debt.monthlyAmount)
+                    val formattedAmount = CurrencyUtils.format(debt.monthlyAmount, debt.currencyCode)
                     val message = context.getString(
                         R.string.notification_message,
                         debt.creditorName,

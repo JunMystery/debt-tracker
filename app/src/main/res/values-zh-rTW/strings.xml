@@ -79,6 +79,7 @@
     <string name="settings_title">設定</string>
     <string name="settings_general">一般設定</string>
     <string name="settings_language">語言</string>
+    <string name="settings_currency">首選貨幣</string>
     <string name="language_english">英文 (美式)</string>
     <string name="language_vietnamese">越南文</string>
     <string name="settings_notifications">提醒設定</string>
