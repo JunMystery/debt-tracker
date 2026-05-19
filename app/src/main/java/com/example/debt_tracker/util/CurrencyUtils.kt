@@ -12,7 +12,14 @@ object CurrencyUtils {
      */
     fun getPreferredCurrency(context: Context): String {
         val prefs = context.getSharedPreferences("debt_tracker_settings", Context.MODE_PRIVATE)
-        return prefs.getString("pref_preferred_currency", null) ?: getCurrencyCodeForLocale(Locale.getDefault())
+        val saved = prefs.getString("pref_preferred_currency", null)
+        if (saved != null) {
+            return saved
+        }
+        // Fallback on first run: resolve from locale and immediately persist it
+        val defaultCurrency = getCurrencyCodeForLocale(Locale.getDefault())
+        prefs.edit().putString("pref_preferred_currency", defaultCurrency).apply()
+        return defaultCurrency
     }
 
     /**
