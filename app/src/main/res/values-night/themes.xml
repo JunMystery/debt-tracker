@@ -26,5 +26,6 @@
         <item name="android:textColorPrimary">@color/dt_on_surface</item>
         <item name="android:textColorSecondary">@color/dt_secondary</item>
         <item name="colorPrimary">@color/dt_primary</item>
+        <item name="materialAlertDialogViewStyle">@style/Widget_DebtTracker_MaterialAlertDialog</item>
     </style>
 </resources>

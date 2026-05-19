@@ -46,6 +46,16 @@
         <item name="android:textColorPrimary">@color/dt_on_surface</item>
         <item name="android:textColorSecondary">@color/dt_secondary</item>
         <item name="colorPrimary">@color/dt_primary</item>
+        <item name="materialAlertDialogViewStyle">@style/Widget_DebtTracker_MaterialAlertDialog</item>
+    </style>
+
+    <style name="Widget_DebtTracker_MaterialAlertDialog" parent="Widget.Material3.MaterialAlertDialog">
+        <item name="backgroundTint">@color/dt_surface</item>
+        <item name="shapeAppearance">@style/ShapeAppearance_DebtTracker_Dialog</item>
+    </style>
+
+    <style name="ShapeAppearance_DebtTracker_Dialog" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">16dp</item>
     </style>
 
     <!-- Global, reusable TextInputLayout styles with premium white backgrounds and rounded corners -->

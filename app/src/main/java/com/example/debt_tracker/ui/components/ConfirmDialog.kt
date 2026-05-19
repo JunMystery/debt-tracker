@@ -11,7 +11,7 @@ object ConfirmDialog {
         message: String,
         onConfirm: () -> Unit
     ) {
-        MaterialAlertDialogBuilder(context)
+        MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_DebtTracker_MaterialAlertDialog)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(R.string.confirm_yes) { _, _ -> onConfirm() }
