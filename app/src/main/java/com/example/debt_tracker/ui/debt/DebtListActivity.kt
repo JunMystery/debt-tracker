@@ -220,6 +220,9 @@ class DebtListActivity : AppCompatActivity() {
                     onItemLongClick(item)
                     true
                 }
+                binding.btnMore.setOnClickListener {
+                    onItemLongClick(item)
+                }
             }
         }
     }
