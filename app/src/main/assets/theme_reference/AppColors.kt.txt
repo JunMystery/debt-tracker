@@ -1,0 +1,25 @@
+package edu.uit.healthassistant.ui.theme
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+
+object AppColors {
+    // Priority Colors
+    val HighPriority = PriorityHigh
+    val MediumPriority = PriorityMedium
+    val LowPriority = PriorityLow
+
+    // Semantic Colors (Theme Aware)
+    val Primary @Composable get() = MaterialTheme.colorScheme.primary
+    val Secondary @Composable get() = MaterialTheme.colorScheme.secondary
+    val Accent @Composable get() = edu.uit.healthassistant.ui.theme.AppAccent
+
+    @Composable
+    fun divider() = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.12f)
+
+    @Composable
+    fun border() = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.15f)
+    
+    // Gradient or other vibrant styles can be added here
+}

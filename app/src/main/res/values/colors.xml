@@ -1,15 +1,18 @@
 <resources>
-    <color name="dt_primary">#3F51B5</color>
-    <color name="dt_primary_container">#DDE2FF</color>
+    <!-- Adapted from Health-Assistant theme colors -->
+    <color name="dt_primary">#263238</color> <!-- AppPrimary -> deep blue-grey -->
+    <color name="dt_primary_container">#E8ECEF</color>
     <color name="dt_on_primary">#FFFFFF</color>
-    <color name="dt_background">#F6F8FA</color>
-    <color name="dt_surface">#FFFFFF</color>
-    <color name="dt_on_surface">#1A1C20</color>
-    <color name="dt_secondary">#4E5D6C</color>
+    <color name="dt_background">#F6F8FA</color> <!-- LightBackground (soft off-white) -->
+    <color name="dt_surface">#FFFFFF</color> <!-- LightCard -->
+    <color name="dt_on_surface">#263238</color> <!-- LightForeground -->
+    <color name="dt_secondary">#78909C</color> <!-- AppSecondary -->
     <color name="dt_success">#2E7D32</color>
-    <color name="dt_error">#C62828</color>
+    <color name="dt_error">#E57373</color> <!-- LightDestructive -->
     <color name="dt_warning">#EF6C00</color>
-    <color name="dt_outline">#D7DCE2</color>
+    <color name="dt_outline">#19263238</color> <!-- LightBorder with alpha -->
+    <color name="dt_input_background">#FFFFFF</color>
+    <color name="dt_accent">#4DB6AC</color> <!-- AppAccent (soft teal) -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 </resources>

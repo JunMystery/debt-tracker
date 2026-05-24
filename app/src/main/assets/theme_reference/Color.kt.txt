@@ -1,0 +1,60 @@
+package edu.uit.healthassistant.ui.theme
+
+import androidx.compose.ui.graphics.Color
+
+val LightBackground = Color(0xFFF6F8FA) // Soft off-white
+val LightForeground = Color(0xFF263238) // Deep Blue Grey
+val LightCard = Color(0xFFFFFFFF)
+val LightCardForeground = Color(0xFF263238)
+val LightPopover = Color(0xFFFFFFFF)
+val LightPopoverForeground = Color(0xFF263238)
+val LightPrimary = Color(0xFF263238)
+val LightPrimaryForeground = Color(0xFFFFFFFF)
+val LightSecondary = Color(0xFFE8ECEF)
+val LightSecondaryForeground = Color(0xFF263238)
+val LightMuted = Color(0xFFF1F4F8)
+val LightMutedForeground = Color(0xFF78909C)
+val LightAccent = Color(0xFF4DB6AC) // Soft Teal Accent
+val LightAccentForeground = Color(0xFFFFFFFF)
+val LightDestructive = Color(0xFFE57373) // Soft Red
+val LightDestructiveForeground = Color(0xFFFFFFFF)
+val LightBorder = Color(0x19263238)
+val LightInputBackground = Color(0xFFFFFFFF)
+
+val DarkBackground = Color(0xFF050505) // OLED-friendly near black
+val DarkForeground = Color(0xFFF2F4F5) // Soft white, not pure glare
+val DarkCard = Color(0xFF101112)
+val DarkCardForeground = Color(0xFFF2F4F5)
+val DarkPopover = Color(0xFF141516)
+val DarkPopoverForeground = Color(0xFFF2F4F5)
+val DarkPrimary = Color(0xFFF2F4F5)
+val DarkPrimaryForeground = Color(0xFF050505)
+val DarkSecondary = Color(0xFF1A1B1E)
+val DarkSecondaryForeground = Color(0xFFF2F4F5)
+val DarkMuted = Color(0xFF17181A)
+val DarkMutedForeground = Color(0xFFB8BDC2)
+val DarkAccent = Color(0xFF4FB8AE)
+val DarkAccentForeground = Color(0xFF050505)
+val DarkDestructive = Color(0xFFFF6B6B)
+val DarkDestructiveForeground = Color(0xFF1A0505)
+val DarkBorder = Color(0x1FFFFFFF)
+val DarkInputBackground = Color(0xFF111214)
+
+// Priority Colors
+val PriorityHigh = Color(0xFFE57373) // Soft Red
+val PriorityMedium = Color(0xFFFFB74D) // Soft Orange
+val PriorityLow = Color(0xFF81C784) // Soft Green
+
+// Semantic UI Colors
+val AppPrimary = Color(0xFF263238)
+val AppSecondary = Color(0xFF78909C)
+val AppAccent = Color(0xFF4DB6AC) 
+val AppDivider = Color(0x20263238)
+val AppDividerDark = Color(0x20E2E8F0)
+
+// Semantic Habit Colors (Pastel)
+val HabitColorWater = Color(0xFF4DD0E1) // Soft Cyan
+val HabitColorSleep = Color(0xFF9575CD) // Soft Purple
+val HabitColorActivity = Color(0xFFFFB74D) // Soft Orange
+val HabitColorNutrition = Color(0xFF81C784) // Soft Green
+val HabitColorDefault = Color(0xFF64B5F6) // Soft Blue

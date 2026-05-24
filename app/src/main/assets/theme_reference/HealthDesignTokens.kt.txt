@@ -1,0 +1,107 @@
+package edu.uit.healthassistant.ui.theme
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Immutable
+data class HealthSemanticColors(
+    val activity: Color,
+    val heart: Color,
+    val caloriesBurned: Color,
+    val caloriesIntake: Color,
+    val caloriesBalancePositive: Color,
+    val caloriesBalanceNegative: Color,
+    val sleep: Color,
+    val oxygen: Color,
+    val hydration: Color,
+    val surfaceSubtle: Color,
+    val surfaceRaised: Color,
+    val chip: Color,
+    val borderSubtle: Color,
+    val dividerSubtle: Color,
+    val textSecondary: Color,
+    val textTertiary: Color
+)
+
+object HealthColors {
+    @Composable
+    fun semantic(): HealthSemanticColors {
+        val scheme = MaterialTheme.colorScheme
+        val isDark = scheme.background.luminance() < 0.35f
+        return if (isDark) {
+            HealthSemanticColors(
+                activity = Color(0xFF64B5F6),
+                heart = Color(0xFFFF6F91),
+                caloriesBurned = Color(0xFFFFA05C),
+                caloriesIntake = Color(0xFF7BD88F),
+                caloriesBalancePositive = Color(0xFFFFB454),
+                caloriesBalanceNegative = Color(0xFF68C7FF),
+                sleep = Color(0xFF9FA8DA),
+                oxygen = Color(0xFF62D6E8),
+                hydration = Color(0xFF4DD0E1),
+                surfaceSubtle = Color(0xFF141416),
+                surfaceRaised = Color(0xFF101112),
+                chip = Color(0xFF1A1B1E),
+                borderSubtle = Color.White.copy(alpha = 0.10f),
+                dividerSubtle = Color.White.copy(alpha = 0.08f),
+                textSecondary = scheme.onSurface.copy(alpha = 0.68f),
+                textTertiary = scheme.onSurface.copy(alpha = 0.46f)
+            )
+        } else {
+            HealthSemanticColors(
+                activity = Color(0xFF2F80ED),
+                heart = Color(0xFFE91E63),
+                caloriesBurned = Color(0xFFFF6B35),
+                caloriesIntake = Color(0xFF4CAF50),
+                caloriesBalancePositive = Color(0xFFFF9800),
+                caloriesBalanceNegative = Color(0xFF2196F3),
+                sleep = Color(0xFF5C6BC0),
+                oxygen = Color(0xFF2196F3),
+                hydration = Color(0xFF00ACC1),
+                surfaceSubtle = scheme.surfaceVariant.copy(alpha = 0.32f),
+                surfaceRaised = scheme.surface,
+                chip = scheme.surfaceVariant.copy(alpha = 0.55f),
+                borderSubtle = scheme.outlineVariant.copy(alpha = 0.45f),
+                dividerSubtle = scheme.onSurface.copy(alpha = 0.08f),
+                textSecondary = scheme.onSurface.copy(alpha = 0.62f),
+                textTertiary = scheme.onSurface.copy(alpha = 0.42f)
+            )
+        }
+    }
+}
+
+object HealthSpacing {
+    val screenHorizontal = 20.dp
+    val cardPadding = 12.dp
+    val cardInner = 8.dp
+    val rowGap = 10.dp
+    val sectionGap = 16.dp
+}
+
+object HealthShapes {
+    val card = 18.dp
+    val section = 12.dp
+    val compactButton = 10.dp
+    val iconBox = 12.dp
+    val chip = 20.dp
+}
+
+object HealthSizes {
+    val minTouchTarget = 48.dp
+    val compactIcon = 16.dp
+    val metricIcon = 14.dp
+    val actionIcon = 18.dp
+}
+
+object HealthType {
+    val cardTitle = 15.sp
+    val actionLabel = 12.sp
+    val metricValue = 18.sp
+    val metricLabel = 10.sp
+    val chipLabel = 11.sp
+}
